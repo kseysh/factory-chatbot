@@ -2,4 +2,4 @@ rootProject.name = 'factory-chatbot'
 
 include 'chat'
 include 'mcp-client'
-include 'mcp-server'
+include 'mcp-db-server'
