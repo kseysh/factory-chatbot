@@ -1,0 +1,50 @@
+plugins { // 빌드와 배포 프로세스를 확장하는 데 사용됨
+    id 'java' // Java 컴파일, 테스트, JAR 패키징 등의 태스크 제공
+    id 'org.springframework.boot' version '3.3.2'
+    id 'io.spring.dependency-management' version '1.1.7' // 의존성 버전 관리 최적화
+}
+
+group = 'core'
+version = '1'
+
+allprojects { // 멀티모듈 설정 공유
+    repositories {
+        mavenCentral()
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.ai:spring-ai-bom:1.0.2"
+        }
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+
+    dependencies { // gradle에서 의존성은 여기서 관리
+        // implementation: 의존 라이브러리 수정시 본 모듈까지만 재빌드
+        // api: 의존 라이브러리 수정시 본 모듈을 의존하는 모듈들 전부 재빌드
+        // compileOnly: compile시에만 빌드하고 빌드 결과물에는 포함 X
+        // annotationProcessor: 자바 컴파일 타임에 어노테이션을 분석, 필요한 코드 자동 생성 및 검증
+
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    tasks.named('test') { // task를 구성하여 실행하는 Gradle의 실행 작업 단위
+        useJUnitPlatform()
+    }
+}
+
