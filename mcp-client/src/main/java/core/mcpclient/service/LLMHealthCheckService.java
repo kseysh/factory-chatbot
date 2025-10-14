@@ -27,7 +27,7 @@ public class LLMHealthCheckService {
             String response = chatModel.call(new Prompt("Hello, respond with just 'OK'"))
                     .getResult().getOutput().toString();
 
-            return "✅ LLM 연결 성공!\n" +
+            return "✅ LLM 연결 선공!\n" +
                     "테스트 응답: " + response.trim();
         } catch (Exception e) {
             return "❌ LLM 연결 실패\n" +
