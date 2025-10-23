@@ -16,13 +16,13 @@
 .gradle
 gradle
 build
+out
 
 # Mac OS
 .DS_Store
 **/.DS_Store
 
 # secret #
-application.yml
 application-local.yml
 application-test.yml
 application-dev.yml
