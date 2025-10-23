@@ -8,18 +8,18 @@
 .idea
 *.iml
 
-# Package Files #
-*.jar
-*.war
-
 # build #
 .gradle
-gradle
 build
+out
 
 # Mac OS
 .DS_Store
 **/.DS_Store
 
 # secret #
-*.yml
+application-local.yml
+application-test.yml
+application-dev.yml
+application-prod.yml
+
