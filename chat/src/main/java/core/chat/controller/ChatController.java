@@ -21,7 +21,8 @@ public class ChatController {
 
     @GetMapping("/v1/mcp/health")
     public ResponseEntity<String> llmHealthCheck() {
-        return ResponseEntity.ok(llmHealthCheckService.checkLLMConnection());
+        if(llmHealthCheckService.isLLMConnected()) return ResponseEntity.ok().build();
+        else return ResponseEntity.internalServerError().build();
     }
 
     @GetMapping("/health")
