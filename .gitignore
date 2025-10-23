@@ -8,13 +8,8 @@
 .idea
 *.iml
 
-# Package Files #
-*.jar
-*.war
-
 # build #
 .gradle
-gradle
 build
 out
 
