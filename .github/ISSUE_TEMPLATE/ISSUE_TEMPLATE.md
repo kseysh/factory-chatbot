@@ -1,4 +1,0 @@
-## 🚀 Issue Summary
-
-#### 🚗 Implement TODO
-- [ ]
