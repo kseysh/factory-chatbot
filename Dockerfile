@@ -1,6 +1,6 @@
 FROM amazoncorretto:21
 WORKDIR /app
-COPY ./build/libs/app-server-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY ./build/libs/*.jar /app/app.jar
 
 ARG SPRING_PROFILES_ACTIVE
 ENV SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
