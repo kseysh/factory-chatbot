@@ -25,12 +25,12 @@ fi
 
 # Stop existing container on port 8080
 echo "Stopping existing container on port ${BLUE_PORT}..."
-docker stop "${CONTAINER_NAME}" 2>/dev/null || true
-docker rm "${CONTAINER_NAME}" 2>/dev/null || true
+sudo docker stop "${CONTAINER_NAME}" 2>/dev/null || true
+sudo docker rm "${CONTAINER_NAME}" 2>/dev/null || true
 
 # Pull Docker image
 echo "Pulling Docker image: ${DOCKER_IMAGE}..."
-docker pull "${DOCKER_IMAGE}"
+sudo docker pull "${DOCKER_IMAGE}"
 
 # Deploy new container
 echo "Starting new container on port ${BLUE_PORT}..."
@@ -42,7 +42,7 @@ if [ ! -z "${BEDROCK_API_KEY}" ]; then
 fi
 
 # Start new container
-docker run -d \
+sudo docker run -d \
     --name "${CONTAINER_NAME}" \
     --restart always \
     -p "${BLUE_PORT}:8080" \
@@ -71,8 +71,8 @@ done
 
 if [ ${RETRY_COUNT} -eq ${MAX_RETRIES} ]; then
     echo "ERROR: Health check failed"
-    docker stop "${CONTAINER_NAME}" || true
-    docker rm "${CONTAINER_NAME}" || true
+    sudo docker stop "${CONTAINER_NAME}" || true
+    sudo docker rm "${CONTAINER_NAME}" || true
     exit 1
 fi
 
@@ -81,4 +81,4 @@ echo "Deployment successful!"
 echo "Container running on port ${BLUE_PORT}"
 echo ""
 echo "Running containers:"
-docker ps
+sudo docker ps
