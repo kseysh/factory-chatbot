@@ -95,4 +95,4 @@ jobs:
 
             echo ""
             echo "Deployment completed. Container status:"
-            docker ps
+            sudo docker ps
