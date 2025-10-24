@@ -88,7 +88,7 @@ jobs:
 
             # 환경 변수 설정
             export DOCKER_IMAGE_URL="${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:latest"
-            export BEDROCK_API_KEY="${{ steps.extract_key.outputs.bedrock_api_key }}"
+            export AWS_BEARER_TOKEN_BEDROCK="${{ steps.extract_key.outputs.bedrock_api_key }}"
 
             # 배포 실행
             ${HOME}/app/script/deploy.sh

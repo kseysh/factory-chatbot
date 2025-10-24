@@ -38,7 +38,7 @@ echo "Starting new container on port ${BLUE_PORT}..."
 # Prepare environment variables
 ENV_VARS=""
 if [ ! -z "${BEDROCK_API_KEY}" ]; then
-    ENV_VARS="-e SPRING_AI_BEDROCK_API_KEY=${BEDROCK_API_KEY}"
+    ENV_VARS="-e AWS_BEARER_TOKEN_BEDROCK=${BEDROCK_API_KEY}"
 fi
 
 # Start new container
