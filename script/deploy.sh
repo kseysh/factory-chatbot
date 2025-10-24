@@ -54,7 +54,7 @@ echo "Container started. Waiting for health check..."
 
 # Health check
 RETRY_COUNT=0
-MAX_RETRIES=30
+MAX_RETRIES=60
 
 while [ ${RETRY_COUNT} -lt ${MAX_RETRIES} ]; do
     if curl -sf "http://localhost:${BLUE_PORT}/health" > /dev/null 2>&1; then
@@ -65,7 +65,7 @@ while [ ${RETRY_COUNT} -lt ${MAX_RETRIES} ]; do
     RETRY_COUNT=$((RETRY_COUNT + 1))
     if [ ${RETRY_COUNT} -lt ${MAX_RETRIES} ]; then
         echo -n "."
-        sleep 2
+        sleep 3
     fi
 done
 
