@@ -79,7 +79,7 @@ jobs:
       - name: Execute deployment
         uses: appleboy/ssh-action@master
         with:
-          username: ec2-user
+          username: ubuntu
           host: ${{ secrets.PROD_SERVER_IP }}
           key: ${{ secrets.PROD_PEM_KEY }}
           script: |
