@@ -70,11 +70,11 @@ jobs:
       - name: Send deployment scripts to EC2
         uses: appleboy/scp-action@master
         with:
-          username: ec2-user
+          username: ubuntu
           host: ${{ secrets.PROD_SERVER_IP }}
           key: ${{ secrets.PROD_PEM_KEY }}
           source: "./script/"
-          target: "/home/ec2-user/app/"
+          target: "/home/ubuntu/app/"
 
       - name: Execute deployment
         uses: appleboy/ssh-action@master
