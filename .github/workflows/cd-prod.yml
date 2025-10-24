@@ -71,8 +71,8 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           username: ec2-user
-          host: ${{ secrets.DEV_SERVER_IP }}
-          key: ${{ secrets.DEV_PEM_KEY }}
+          host: ${{ secrets.PROD_SERVER_IP }}
+          key: ${{ secrets.PROD_PEM_KEY }}
           source: "./script/"
           target: "/home/ec2-user/app/"
 
@@ -80,8 +80,8 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           username: ec2-user
-          host: ${{ secrets.DEV_SERVER_IP }}
-          key: ${{ secrets.DEV_PEM_KEY }}
+          host: ${{ secrets.PROD_SERVER_IP }}
+          key: ${{ secrets.PROD_PEM_KEY }}
           script: |
             # 스크립트 실행 권한 설정
             chmod +x ${HOME}/app/script/*.sh
