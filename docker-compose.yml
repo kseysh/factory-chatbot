@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  chat:
+    image: ${DOCKER_IMAGE_URL}
+    container_name: factory-chatbot-chat
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_APPLICATION_NAME=chat
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - SPRING_AI_BEDROCK_MODEL=${BEDROCK_MODEL:-anthropic.claude-3-sonnet-20240229-v1:0}
