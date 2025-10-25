@@ -82,7 +82,6 @@ jobs:
 
             # 환경 변수 설정
             export DOCKER_IMAGE_URL="${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:latest"
-            export AWS_BEARER_TOKEN_BEDROCK="${{ secrets.AWS_BEARER_TOKEN_BEDROCK }}"
 
             # 배포 실행
             ${HOME}/app/script/deploy.sh

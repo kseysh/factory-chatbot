@@ -7,7 +7,6 @@ APP_DIR="${HOME}/app"
 BLUE_PORT=8080
 HEALTH_CHECK_TIMEOUT=60
 DOCKER_IMAGE="${DOCKER_IMAGE_URL:-}"
-BEDROCK_API_KEY="${BEDROCK_API_KEY:-}"
 CONTAINER_NAME="factory-chatbot-chat"
 
 echo "Starting deployment..."
@@ -34,12 +33,6 @@ sudo docker pull "${DOCKER_IMAGE}"
 
 # Deploy new container
 echo "Starting new container on port ${BLUE_PORT}..."
-
-# Prepare environment variables
-ENV_VARS=""
-if [ ! -z "${BEDROCK_API_KEY}" ]; then
-    ENV_VARS="-e AWS_BEARER_TOKEN_BEDROCK=${BEDROCK_API_KEY}"
-fi
 
 # Start new container
 sudo docker run -d \

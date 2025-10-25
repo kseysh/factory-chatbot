@@ -10,5 +10,4 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_APPLICATION_NAME=chat
-      - AWS_REGION=${AWS_REGION:-us-east-1}
-      - SPRING_AI_BEDROCK_MODEL=${BEDROCK_MODEL:-anthropic.claude-3-sonnet-20240229-v1:0}
+      - AWS_REGION=${AWS_REGION:-us-west-2}
