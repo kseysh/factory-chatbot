@@ -14,7 +14,8 @@ public class LLMHealthCheckService {
     private final ChatModel chatModel;
 
     public boolean isLLMConnected() {
-        log.info("current Model = {}", chatModel.getDefaultOptions().getModel());
+        log.info("current Model = {}", chatModel);
+        log.info("current Model = {}", chatModel.getDefaultOptions());
         try {
             log.info("LLM Connected!\n " + "LLM answer = {}",
                     chatModel.call(new Prompt("Hello, respond with just 'OK'")).getResult().getOutput().getText());
