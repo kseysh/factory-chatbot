@@ -61,12 +61,6 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
 
-      - name: Extract Bedrock API Key from config
-        id: extract_key
-        run: |
-          API_KEY=$(echo "${{ secrets.MCP_CLIENT_APPLICATION_PROD_YML }}" | grep "api-key:" | awk '{print $2}')
-          echo "bedrock_api_key=${API_KEY}" >> $GITHUB_OUTPUT
-
       - name: Send deployment scripts to EC2
         uses: appleboy/scp-action@master
         with:
@@ -88,7 +82,7 @@ jobs:
 
             # 환경 변수 설정
             export DOCKER_IMAGE_URL="${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:latest"
-            export AWS_BEARER_TOKEN_BEDROCK="${{ steps.extract_key.outputs.bedrock_api_key }}"
+            export AWS_BEARER_TOKEN_BEDROCK="${{ secrets.AWS_BEARER_TOKEN_BEDROCK }}"
 
             # 배포 실행
             ${HOME}/app/script/deploy.sh
