@@ -2,6 +2,7 @@ package core.mcpclient.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
@@ -12,14 +13,27 @@ import org.springframework.stereotype.Service;
 public class LLMHealthCheckService {
 
     private final ChatModel chatModel;
+    private final ChatClient chatClient;
+
+//    public boolean isLLMConnected() {
+//        log.info("current Model = {}", chatModel);
+//        log.info("current Model = {}", chatModel.getDefaultOptions().getModel());
+//        log.info("current Model = {}", chatModel.getDefaultOptions().getMaxTokens());
+//        try {
+//            log.info("LLM Connected!\n " + "LLM answer = {}",
+//                    chatModel.call(new Prompt("Hello, respond with just 'OK'")).getResult().getOutput().getText());
+//            return true;
+//        } catch (Exception e) {
+//            log.error("exception", e);
+//            return false;
+//        }
+//    }
 
     public boolean isLLMConnected() {
-        log.info("current Model = {}", chatModel);
-        log.info("current Model = {}", chatModel.getDefaultOptions().getModel());
-        log.info("current Model = {}", chatModel.getDefaultOptions().getMaxTokens());
+        log.info("current Model = {}", chatClient);
         try {
             log.info("LLM Connected!\n " + "LLM answer = {}",
-                    chatModel.call(new Prompt("Hello, respond with just 'OK'")).getResult().getOutput().getText());
+                    chatClient.prompt().user("Hello, respond with just 'OK'").call().content());
             return true;
         } catch (Exception e) {
             log.error("exception", e);
