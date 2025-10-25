@@ -1,13 +1,12 @@
 package core.mcpclient.config;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.bedrock.converse.BedrockProxyChatModel;
 import org.springframework.ai.bedrock.converse.BedrockChatOptions;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.*;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
@@ -17,16 +16,26 @@ import java.time.Duration;
 @Slf4j
 @Configuration
 @Profile("prod")
+@RequiredArgsConstructor
 public class BedrockConfig {
 
-    private static final String MODEL_ID = "us.anthropic.claude-3-5-sonnet-20240620-v1:0";
+    @Value("${spring.ai.bedrock.converse.chat.options.model}")
+    private String modelId;
+
+    @Value("${spring.ai.bedrock.aws.region}")
+    private String region;
+
+    @Value("${spring.ai.bedrock.converse.chat.options.max-tokens}")
+    private Integer maxTokens;
+
+    @Value("${spring.ai.bedrock.converse.chat.options.temperature}")
+    private Double temperature;
 
     @Bean
     public BedrockRuntimeClient bedrockRuntimeClient() {
-        log.info("=== Creating BedrockRuntimeClient ===");
-
+        log.info("🤔 Creating BedrockRuntimeClient");
         BedrockRuntimeClient client = BedrockRuntimeClient.builder()
-                .region(Region.US_WEST_2)
+                .region(Region.of(region))
                 .credentialsProvider(DefaultCredentialsProvider.builder().build())
                 .overrideConfiguration(config -> config
                         .apiCallTimeout(Duration.ofMinutes(5))
@@ -38,25 +47,24 @@ public class BedrockConfig {
     }
 
     @Bean
-    @Primary
-    public BedrockProxyChatModel bedrockProxyChatModel(BedrockRuntimeClient client) {
-        log.info("=== Creating BedrockProxyChatModel ===");
-        log.info("📝 Model ID: {}", MODEL_ID);
-
-        // BedrockConverseApiOptions 사용
-        BedrockChatOptions options = BedrockChatOptions.builder()
-                .model(MODEL_ID)
-                .temperature(0.7)
-                .maxTokens(1000)
+    public BedrockChatOptions bedrockChatOptions() {
+        return BedrockChatOptions.builder()
+                .model(modelId)
+                .temperature(temperature)
+                .maxTokens(maxTokens)
                 .build();
+    }
 
-        log.info("📋 Options created - Model: {}, MaxTokens: {}",
-                options.getModel(), options.getMaxTokens());
+    @Bean
+    public BedrockProxyChatModel bedrockProxyChatModel(BedrockRuntimeClient client, BedrockChatOptions chatOptions) {
+        log.info("🤔 Creating BedrockProxyChatModel");
+        log.info("📝 Model ID: {}", modelId);
+        log.info("📋 Options created - Model: {}, MaxTokens: {}", modelId, maxTokens);
 
         BedrockProxyChatModel model = BedrockProxyChatModel.builder()
-                .defaultOptions(options)
+                .defaultOptions(chatOptions)
                 .bedrockRuntimeClient(client)
-                .region(Region.US_WEST_2)
+                .region(Region.of(region))
                 .build();
 
         log.info("✅ BedrockProxyChatModel created");
@@ -68,17 +76,13 @@ public class BedrockConfig {
     }
 
     @Bean
-    public ChatClient bedrockChatClient(BedrockProxyChatModel chatModel) {
+    public ChatClient bedrockChatClient(BedrockProxyChatModel chatModel, BedrockChatOptions chatOptions) {
         log.info("=== Creating ChatClient ===");
         log.info("📋 ChatModel default options: {}", chatModel.getDefaultOptions());
         log.info("📝 Model ID from options: {}", chatModel.getDefaultOptions().getModel());
 
         ChatClient client = ChatClient.builder(chatModel)
-                .defaultOptions(BedrockChatOptions.builder()
-                        .model(MODEL_ID)
-                        .temperature(0.7)
-                        .maxTokens(1000)
-                        .build())
+                .defaultOptions(chatOptions)
                 .build();
 
         log.info("✅ ChatClient created");
