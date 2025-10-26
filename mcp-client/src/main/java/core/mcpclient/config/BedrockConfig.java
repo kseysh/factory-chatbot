@@ -32,12 +32,15 @@ public class BedrockConfig {
         log.info("🤔 Creating BedrockRuntimeClient");
         log.info("📝 Region: {}", awsConnectionProperties.getRegion());
 
+        Duration timeout = awsConnectionProperties.getTimeout();
+        log.info("📝 Timeout: {}", timeout);
+
         BedrockRuntimeClient client = BedrockRuntimeClient.builder()
                 .region(Region.of(awsConnectionProperties.getRegion()))
                 .credentialsProvider(DefaultCredentialsProvider.builder().build())
                 .overrideConfiguration(config -> config
-                        .apiCallTimeout(Duration.parse("PT" + awsConnectionProperties.getTimeout()))
-                        .apiCallAttemptTimeout(Duration.parse("PT" + awsConnectionProperties.getTimeout())))
+                        .apiCallTimeout(timeout)
+                        .apiCallAttemptTimeout(timeout))
                 .build();
 
         log.info("✅ BedrockRuntimeClient created");

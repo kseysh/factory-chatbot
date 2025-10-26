@@ -1,13 +1,10 @@
 package core.mcpclient.config;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LlmProfileConfig {
     @Configuration
     @Profile("local")
