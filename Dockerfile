@@ -1,6 +1,6 @@
 FROM amazoncorretto:21
 WORKDIR /app
-COPY ./build/libs/factory-chatbot-1.jar /app/app.jar
+COPY .chat/build/libs/chat.jar /app/app.jar
 
 ARG SPRING_PROFILES_ACTIVE=prod
 ENV SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
