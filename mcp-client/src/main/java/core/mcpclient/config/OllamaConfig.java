@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @RequiredArgsConstructor
 @Profile("local")
-public class LLMConfig {
+public class OllamaConfig {
 
     @Bean
     public ChatClient ollamaChatClient(ChatModel chatModel) {
