@@ -43,28 +43,29 @@ public class BedrockConfig {
                         .apiCallAttemptTimeout(timeout))
                 .build();
 
-        log.info("✅ BedrockRuntimeClient created");
+        log.info("✅ BedrockRuntimeClient created\n");
         return client;
     }
 
     @Bean
     public BedrockChatOptions bedrockChatOptions() {
-        log.info("📋 Creating BedrockChatOptions");
+        log.info("🤔 Creating BedrockChatOptions");
         log.info("📝 Model ID: {}", bedrockProperties.getModelId());
         log.info("📝 Temperature: {}", bedrockProperties.getTemperature());
         log.info("📝 Max Tokens: {}", bedrockProperties.getMaxTokens());
 
-        return BedrockChatOptions.builder()
+        BedrockChatOptions chatOptions = BedrockChatOptions.builder()
                 .model(bedrockProperties.getModelId())
                 .temperature(bedrockProperties.getTemperature())
                 .maxTokens(bedrockProperties.getMaxTokens())
                 .build();
+
+        log.info("✅ BedrockChatOptions created\n");
+        return chatOptions;
     }
 
     @Bean
-    public BedrockProxyChatModel bedrockProxyChatModel(
-            BedrockRuntimeClient client,
-            BedrockChatOptions chatOptions) {
+    public BedrockProxyChatModel bedrockProxyChatModel(BedrockRuntimeClient client, BedrockChatOptions chatOptions) {
         log.info("🤔 Creating BedrockProxyChatModel");
 
         BedrockProxyChatModel model = BedrockProxyChatModel.builder()
@@ -73,24 +74,21 @@ public class BedrockConfig {
                 .region(Region.of(awsConnectionProperties.getRegion()))
                 .build();
 
-        log.info("✅ BedrockProxyChatModel created");
-        log.info("📋 Default options - Model: {}, MaxTokens: {}",
+        log.info("📋 Default options - Model: {}, MaxTokens: {}\n",
                 model.getDefaultOptions().getModel(),
                 model.getDefaultOptions().getMaxTokens());
-
+        log.info("✅ BedrockProxyChatModel created\n");
         return model;
     }
 
     @Bean
     public ChatClient bedrockChatClient(BedrockProxyChatModel chatModel) {
-        log.info("=== Creating ChatClient ===");
-        log.info("📝 Model ID from options: {}",
-                chatModel.getDefaultOptions().getModel());
+        log.info("🤔 Creating ChatClient ===");
+        log.info("📝 Model ID from options: {}", chatModel.getDefaultOptions().getModel());
 
-        ChatClient client = ChatClient.builder(chatModel)
-                .build();
+        ChatClient client = ChatClient.builder(chatModel).build();
 
-        log.info("✅ ChatClient created");
+        log.info("✅ ChatClient created\n");
         return client;
     }
 }
