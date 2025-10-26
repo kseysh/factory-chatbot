@@ -22,13 +22,12 @@ jobs:
           distribution: 'corretto'
           java-version: '21'
 
-      - name: Create application-prod.yml files
+      - name: Create prod properties files
         run: |
           touch ./chat/src/main/resources/application-prod.yml
-          touch ./mcp-client/src/main/resources/application-prod.yml
-
+          mkdir -p ./mcp-client/src/main/resources/mcp-client
           echo "${{ secrets.CHAT_APPLICATION_PROD_YML }}" >> ./chat/src/main/resources/application-prod.yml
-          echo "${{ secrets.MCP_CLIENT_APPLICATION_PROD_YML }}" >> ./mcp-client/src/main/resources/application-prod.yml
+          echo "${{ secrets.LLM_BEDROCK_PROPERTIES }}" > ./mcp-client/src/main/resources/mcp-client/llm-bedrock.properties
 
         shell: bash
 

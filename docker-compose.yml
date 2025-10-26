@@ -10,4 +10,3 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_APPLICATION_NAME=chat
-      - AWS_REGION=${AWS_REGION:-us-west-2}
