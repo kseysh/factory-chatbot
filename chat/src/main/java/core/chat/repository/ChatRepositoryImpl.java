@@ -14,8 +14,8 @@ public class ChatRepositoryImpl implements ChatRepository {
     private final EntityManager em;
 
     @Override
-    public List<Long> findAllRoomIdByUserId(String userId) {
-        return chatRoomJpaRepository.findAllRoomIdByUserId(userId);
+    public boolean existsByUserIdAndRoomId(String userId, Long roomId) {
+        return chatRoomJpaRepository.existsByUserIdAndId(userId, roomId);
     }
 
     @Override

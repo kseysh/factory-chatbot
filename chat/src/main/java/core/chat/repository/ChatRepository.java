@@ -2,10 +2,9 @@ package core.chat.repository;
 
 import core.chat.entity.ChatHistory;
 import core.chat.entity.ChatRoom;
-import java.util.List;
 
 public interface ChatRepository {
-    List<Long> findAllRoomIdByUserId(String userId);
+    boolean existsByUserIdAndRoomId(String userId, Long roomId);
 
     void insertChatRoomWithoutSelect(ChatRoom chatRoom);
     void insertChatHistoryWithoutSelect(ChatHistory chatHistory);

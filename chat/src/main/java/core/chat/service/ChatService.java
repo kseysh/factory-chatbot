@@ -28,6 +28,6 @@ public class ChatService {
 
     @Transactional(readOnly = true)
     public boolean checkIsValidRoomId(String userId, Long roomId) {
-        return chatRepository.findAllRoomIdByUserId(userId).contains(roomId);
+        return chatRepository.existsByUserIdAndRoomId(userId, roomId);
     }
 }
