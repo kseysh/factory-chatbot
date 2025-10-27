@@ -1,12 +1,6 @@
 package core.mcpclient.service.dto;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@Getter
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class NewChatRoomInfo {
-
-    private String roomName;
-    private String answer;
-}
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record NewChatRoomInfo(String roomName, String answer) { }
