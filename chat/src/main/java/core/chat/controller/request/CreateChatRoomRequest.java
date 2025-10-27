@@ -7,5 +7,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class CreateChatRoomRequest {
-    String question;
+    private String question;
 }

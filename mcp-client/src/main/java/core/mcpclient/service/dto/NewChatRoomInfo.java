@@ -7,6 +7,6 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class NewChatRoomInfo {
 
-    String roomName;
-    String answer;
+    private String roomName;
+    private String answer;
 }

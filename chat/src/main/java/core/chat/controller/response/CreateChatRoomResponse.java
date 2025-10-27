@@ -8,10 +8,10 @@ import lombok.*;
 @Builder(access = AccessLevel.PRIVATE)
 public class CreateChatRoomResponse {
 
-    Long roomId;
-    String roomName;
-    Long answerId;
-    String answer;
+    private Long roomId;
+    private String roomName;
+    private Long answerId;
+    private String answer;
 
     public static CreateChatRoomResponse of(String roomName, ChatHistory chatHistory) {
         return CreateChatRoomResponse.builder()
