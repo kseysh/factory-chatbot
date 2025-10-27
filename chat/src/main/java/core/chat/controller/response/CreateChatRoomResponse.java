@@ -8,7 +8,7 @@ import lombok.Builder;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
 public class CreateChatRoomResponse {
-    String roomId;
+    Long roomId;
     String roomName;
     Long answerId;
     String answer;

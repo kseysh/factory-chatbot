@@ -17,12 +17,11 @@ import org.hibernate.annotations.CreationTimestamp;
 @Builder
 public class ChatHistory {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
     @Column(name = "room_id")
-    private String roomId;
+    private Long roomId;
 
     @NotNull
     @Column(columnDefinition = "TEXT")

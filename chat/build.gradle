@@ -5,4 +5,5 @@ dependencies {
 
     runtimeOnly 'org.postgresql:postgresql'
     implementation project(':mcp-client')
+    implementation project(':common:snowflake')
 }

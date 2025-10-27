@@ -17,7 +17,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Builder
 public class ChatRoom {
     @Id
-    private String id;
+    private Long id;
 
     @NotNull
     private String userId;

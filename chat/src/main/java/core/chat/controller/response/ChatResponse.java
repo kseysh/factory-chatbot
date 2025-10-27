@@ -10,7 +10,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
 public class ChatResponse {
-    String roomId;
+    Long roomId;
     Long answerId;
     String answer;
 
