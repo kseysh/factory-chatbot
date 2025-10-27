@@ -17,8 +17,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Builder
 public class ChatRoom {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @NotNull
     private String userId;
