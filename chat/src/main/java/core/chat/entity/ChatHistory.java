@@ -1,5 +1,6 @@
 package core.chat.entity;
 
+import core.common.snowflake.Snowflake;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class ChatHistory {
+
     @Id
     private Long id;
 
@@ -34,4 +36,22 @@ public class ChatHistory {
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
     private LocalDateTime createdAt;
+
+    public static ChatHistory createUserChatHistory(Long roomId, String content) {
+        return ChatHistory.builder()
+                .id(Snowflake.getInstance().nextId())
+                .roomId(roomId)
+                .type(MessageType.USER)
+                .content(content)
+                .build();
+    }
+
+    public static ChatHistory createSystemChatHistory(Long roomId, String content) {
+        return ChatHistory.builder()
+                .id(Snowflake.getInstance().nextId())
+                .roomId(roomId)
+                .type(MessageType.SYSTEM)
+                .content(content)
+                .build();
+    }
 }

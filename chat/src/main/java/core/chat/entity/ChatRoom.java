@@ -1,5 +1,6 @@
 package core.chat.entity;
 
+import core.common.snowflake.Snowflake;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -29,4 +30,12 @@ public class ChatRoom {
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
     private LocalDateTime createdAt;
+
+    public static ChatRoom createChatRoom(String userId, String roomName) {
+        return ChatRoom.builder()
+                .id(Snowflake.getInstance().nextId())
+                .userId(userId)
+                .name(roomName)
+                .build();
+    }
 }
