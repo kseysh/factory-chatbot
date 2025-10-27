@@ -40,9 +40,9 @@ public class ChatFacade {
 
         NewChatRoomInfo newChatRoomInfo = llmService.startNewChat(roomId, question);
 
-        ChatRoom chatRoom = ChatRoom.createChatRoom(roomId, userId, newChatRoomInfo.getRoomName());
+        ChatRoom chatRoom = ChatRoom.createChatRoom(roomId, userId, newChatRoomInfo.roomName());
         ChatHistory userChat = ChatHistory.createUserChatHistory(roomId, question);
-        ChatHistory llmChat = ChatHistory.createLLMChatHistory(roomId, newChatRoomInfo.getAnswer());
+        ChatHistory llmChat = ChatHistory.createLLMChatHistory(roomId, newChatRoomInfo.answer());
         chatService.saveChatHistoryAndChatRoom(chatRoom, userChat, llmChat);
 
         return CreateChatRoomResponse.of(chatRoom.getName(), llmChat);
