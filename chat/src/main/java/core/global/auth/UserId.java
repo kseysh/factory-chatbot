@@ -1,4 +1,4 @@
-package core.chat.auth;
+package core.global.auth;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
