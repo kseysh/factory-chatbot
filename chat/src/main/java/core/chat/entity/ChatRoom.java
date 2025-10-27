@@ -1,5 +1,6 @@
 package core.chat.entity;
 
+import core.common.snowflake.Snowflake;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -16,8 +17,8 @@ import org.hibernate.annotations.CreationTimestamp;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class ChatRoom {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -26,8 +27,15 @@ public class ChatRoom {
     @NotNull
     private String name;
 
-    @NotNull
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
     private LocalDateTime createdAt;
+
+    public static ChatRoom createChatRoom(Long roomId, String userId, String roomName) {
+        return ChatRoom.builder()
+                .id(roomId)
+                .userId(userId)
+                .name(roomName)
+                .build();
+    }
 }
