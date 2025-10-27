@@ -6,22 +6,19 @@ import core.chat.controller.response.ChatResponse;
 import core.chat.controller.response.CreateChatRoomResponse;
 import core.chat.entity.ChatHistory;
 import core.chat.entity.MessageType;
-import core.chat.repository.ChatHistoryRepository;
 import core.chat.repository.ChatRoomRepository;
 import core.common.snowflake.Snowflake;
 import core.mcpclient.service.LLMService;
-import jakarta.transaction.Transactional;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ChatService {
+public class ChatFacade {
 
-    private final ChatRoomRepository chatRoomRepository;
-    private final ChatHistoryRepository chatHistoryRepository;
     private final LLMService llmService;
+    private final ChatHistoryService chatHistoryService;
+    private final ChatRoomRepository chatRoomRepository;
     private final Snowflake snowflake = Snowflake.getInstance();
 
     public ChatResponse chat(String userId, ChatRequest chatRequest) {
@@ -47,7 +44,7 @@ public class ChatService {
                 .content(answer)
                 .build();
 
-        saveChatHistory(userChat, llmChat);
+        chatHistoryService.saveChatHistory(userChat, llmChat);
 
         return ChatResponse.of(llmChat);
     }
@@ -56,10 +53,7 @@ public class ChatService {
         return chatRoomRepository.findByUserId(userId).getId().equals(roomId);
     }
 
-    @Transactional
-    public void saveChatHistory(ChatHistory userChat, ChatHistory llmChat){
-        chatHistoryRepository.saveAll(List.of(userChat, llmChat));
-    }
+
 
     public CreateChatRoomResponse createChatRoom(String userId, CreateChatRoomRequest request) {
         Long roomId = Snowflake.getInstance().nextId();
