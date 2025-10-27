@@ -21,8 +21,8 @@ public class ChatHistory {
     private Long id;
 
     @NotNull
-    @Column(name = "user_id")
-    private String userId;
+    @Column(name = "room_id")
+    private String roomId;
 
     @NotNull
     @Column(columnDefinition = "TEXT")
