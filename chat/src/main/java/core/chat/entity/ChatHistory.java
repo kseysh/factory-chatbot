@@ -46,11 +46,11 @@ public class ChatHistory {
                 .build();
     }
 
-    public static ChatHistory createSystemChatHistory(Long roomId, String content) {
+    public static ChatHistory createLLMChatHistory(Long roomId, String content) {
         return ChatHistory.builder()
                 .id(Snowflake.getInstance().nextId())
                 .roomId(roomId)
-                .type(MessageType.SYSTEM)
+                .type(MessageType.LLM)
                 .content(content)
                 .build();
     }

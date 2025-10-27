@@ -17,6 +17,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class ChatRoom {
+
     @Id
     private Long id;
 
@@ -26,7 +27,6 @@ public class ChatRoom {
     @NotNull
     private String name;
 
-    @NotNull
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
     private LocalDateTime createdAt;

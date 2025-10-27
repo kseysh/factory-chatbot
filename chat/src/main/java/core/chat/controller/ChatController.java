@@ -28,7 +28,7 @@ public class ChatController {
     public ResponseEntity<CreateChatRoomResponse> createChatRoom(
             @UserId String userId,
             @RequestBody CreateChatRoomRequest request) {
-        return ResponseEntity.ok(chatFacade.createChatRoom(userId, request));
+        return ResponseEntity.ok(chatFacade.startNewChat(userId, request));
     }
 
     @GetMapping("/v1/mcp/health")

@@ -1,13 +1,13 @@
 package core.chat.controller.response;
 
 import core.chat.entity.ChatHistory;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.*;
 
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
 public class CreateChatRoomResponse {
+
     Long roomId;
     String roomName;
     Long answerId;
