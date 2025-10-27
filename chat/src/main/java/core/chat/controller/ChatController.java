@@ -1,7 +1,10 @@
 package core.chat.controller;
 
+import core.chat.auth.UserId;
 import core.chat.controller.request.ChatRequest;
+import core.chat.controller.request.CreateChatRoomRequest;
 import core.chat.controller.response.ChatResponse;
+import core.chat.controller.response.CreateChatRoomResponse;
 import core.chat.service.ChatService;
 import core.mcpclient.service.LLMHealthCheckService;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +18,17 @@ public class ChatController {
     private final ChatService chatService;
 
     @PostMapping("/v1/chat")
-    public ResponseEntity<ChatResponse> read(@RequestBody ChatRequest chatRequest) {
-        return ResponseEntity.ok(chatService.chat(chatRequest));
+    public ResponseEntity<ChatResponse> chat(
+            @UserId String userId,
+            @RequestBody ChatRequest request) {
+        return ResponseEntity.ok(chatService.chat(request));
+    }
+
+    @PostMapping("/v1/chat/room/create")
+    public ResponseEntity<CreateChatRoomResponse> createChatRoom(
+            @UserId String userId,
+            @RequestBody CreateChatRoomRequest request) {
+        return ResponseEntity.ok(chatService.createChatRoom(userId, request));
     }
 
     @GetMapping("/v1/mcp/health")

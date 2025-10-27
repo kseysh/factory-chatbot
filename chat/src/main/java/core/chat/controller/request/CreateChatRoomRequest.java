@@ -1,11 +1,11 @@
 package core.chat.controller.request;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
-public class ChatRequest {
-    Long roomId;
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+public class CreateChatRoomRequest {
     String question;
 }
