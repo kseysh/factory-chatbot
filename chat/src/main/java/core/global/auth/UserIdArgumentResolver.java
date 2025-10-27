@@ -18,6 +18,10 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        return webRequest.getHeader(CLIENT_ID_HEADER);
+        String userId = webRequest.getHeader(CLIENT_ID_HEADER);
+        if(userId == null || userId.isBlank()) {
+            throw new IllegalArgumentException("X-Client-Id header is required");
+        }
+        return userId;
     }
 }
