@@ -13,7 +13,7 @@ public class CreateChatRoomResponse {
     Long answerId;
     String answer;
 
-    public CreateChatRoomResponse of(String roomName, ChatHistory chatHistory) {
+    public static CreateChatRoomResponse of(String roomName, ChatHistory chatHistory) {
         return CreateChatRoomResponse.builder()
                 .roomId(chatHistory.getRoomId())
                 .roomName(roomName)
