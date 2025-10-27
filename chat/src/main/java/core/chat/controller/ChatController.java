@@ -1,6 +1,6 @@
 package core.chat.controller;
 
-import core.chat.auth.UserId;
+import core.global.auth.UserId;
 import core.chat.controller.request.ChatRequest;
 import core.chat.controller.request.CreateChatRoomRequest;
 import core.chat.controller.response.ChatResponse;
@@ -21,7 +21,7 @@ public class ChatController {
     public ResponseEntity<ChatResponse> chat(
             @UserId String userId,
             @RequestBody ChatRequest request) {
-        return ResponseEntity.ok(chatService.chat(request));
+        return ResponseEntity.ok(chatService.chat(userId, request));
     }
 
     @PostMapping("/v1/chat/room/create")

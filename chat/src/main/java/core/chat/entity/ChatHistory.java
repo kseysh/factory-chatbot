@@ -31,7 +31,6 @@ public class ChatHistory {
     @Enumerated(EnumType.STRING)
     private MessageType type;
 
-    @NotNull
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
     private LocalDateTime createdAt;

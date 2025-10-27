@@ -1,11 +1,11 @@
-package core.chat;
+package core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"core.mcpclient, core.chat"})
+@ComponentScan(basePackages = {"core.mcpclient, core"})
 public class ChatApplication {
 
     public static void main(String[] args) {
