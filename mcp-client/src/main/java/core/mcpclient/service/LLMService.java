@@ -31,7 +31,6 @@ public class LLMService {
 
         return chatClient.prompt(new Prompt(chatMemory.get(conversationId)))
                 .system(PromptContent.SYSTEM_PROMPT_CREATE_NEW_CHAT.getContent())
-                .user(question)
                 .call()
                 .entity(NewChatRoomInfo.class);
     }
