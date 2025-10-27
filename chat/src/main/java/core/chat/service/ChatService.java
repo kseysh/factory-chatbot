@@ -2,9 +2,7 @@ package core.chat.service;
 
 import core.chat.entity.ChatHistory;
 import core.chat.entity.ChatRoom;
-import core.chat.repository.ChatHistoryRepository;
-import core.chat.repository.ChatRoomRepository;
-import java.util.List;
+import core.chat.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,22 +11,23 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ChatService {
 
-    private final ChatHistoryRepository chatHistoryRepository;
-    private final ChatRoomRepository chatRoomRepository;
+    private final ChatRepository chatRepository;
 
     @Transactional
     public void saveChatHistory(ChatHistory userChat, ChatHistory llmChat){
-        chatHistoryRepository.saveAll(List.of(userChat, llmChat));
+        chatRepository.insertChatHistoryWithoutSelect(userChat);
+        chatRepository.insertChatHistoryWithoutSelect(llmChat);
     }
 
     @Transactional
     public void saveChatHistoryAndChatRoom(ChatRoom chatRoom, ChatHistory userChat, ChatHistory llmChat){
-        chatRoomRepository.save(chatRoom);
-        chatHistoryRepository.saveAll(List.of(userChat, llmChat));
+        chatRepository.insertChatRoomWithoutSelect(chatRoom);
+        chatRepository.insertChatHistoryWithoutSelect(userChat);
+        chatRepository.insertChatHistoryWithoutSelect(llmChat);
     }
 
     @Transactional(readOnly = true)
     public boolean checkIsValidRoomId(String userId, Long roomId) {
-        return !chatRoomRepository.findByUserId(userId).getId().equals(roomId);
+        return chatRepository.findAllRoomIdByUserId(userId).contains(roomId);
     }
 }
