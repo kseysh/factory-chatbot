@@ -31,9 +31,9 @@ public class ChatRoom {
     @Column(updatable = false, name = "created_at")
     private LocalDateTime createdAt;
 
-    public static ChatRoom createChatRoom(String userId, String roomName) {
+    public static ChatRoom createChatRoom(Long roomId, String userId, String roomName) {
         return ChatRoom.builder()
-                .id(Snowflake.getInstance().nextId())
+                .id(roomId)
                 .userId(userId)
                 .name(roomName)
                 .build();

@@ -22,7 +22,7 @@ public class ChatFacade {
     public ChatResponse chat(String userId, ChatRequest chatRequest) {
         Long roomId = chatRequest.getRoomId();
         if (!chatService.checkIsValidRoomId(userId, roomId)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Invalid room ID: " + roomId + " for user: " + userId);
         }
         String question = chatRequest.getQuestion();
         String answer = llmService.chat(roomId, question);
@@ -40,7 +40,7 @@ public class ChatFacade {
 
         NewChatRoomInfo newChatRoomInfo = llmService.startNewChat(roomId, question);
 
-        ChatRoom chatRoom = ChatRoom.createChatRoom(userId, newChatRoomInfo.getRoomName());
+        ChatRoom chatRoom = ChatRoom.createChatRoom(roomId, userId, newChatRoomInfo.getRoomName());
         ChatHistory userChat = ChatHistory.createUserChatHistory(roomId, question);
         ChatHistory llmChat = ChatHistory.createLLMChatHistory(roomId, newChatRoomInfo.getAnswer());
         chatService.saveChatHistoryAndChatRoom(chatRoom, userChat, llmChat);
