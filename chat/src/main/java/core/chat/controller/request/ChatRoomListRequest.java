@@ -1,6 +1,6 @@
 package core.chat.controller.request;
 
-import java.util.Optional;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 
 @Getter
@@ -9,11 +9,12 @@ public class ChatRoomListRequest {
     private static final int MIN_CHAT_ROOM_PAGE_SIZE = 1;
     private static final int MAX_CHAT_ROOM_PAGE_SIZE = 100;
 
-    private final Optional<Long> lastRoomId;
+    @Nullable
+    private final Long lastRoomId;
 
     private final int size;
 
-    public ChatRoomListRequest(Optional<Long> lastRoomId, Integer size) {
+    public ChatRoomListRequest(@Nullable Long lastRoomId, Integer size) {
         this.lastRoomId = lastRoomId;
         this.size = size == null ? DEFAULT_CHAT_ROOMS_SIZE : size;
         if(this.size < MIN_CHAT_ROOM_PAGE_SIZE || this.size > MAX_CHAT_ROOM_PAGE_SIZE){

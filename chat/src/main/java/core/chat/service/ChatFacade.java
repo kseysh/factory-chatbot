@@ -51,8 +51,9 @@ public class ChatFacade {
     }
 
     public ChatRoomListResponse getChatRooms(String userId, ChatRoomListRequest request) {
-        return request.getLastRoomId().map(
-                roomId -> ChatRoomListResponse.of(chatService.getChatRoomsAfter(userId, roomId, request.getSize())))
-                .orElseGet(() -> ChatRoomListResponse.of(chatService.getChatRoomsLatest(userId, request.getSize())));
+        if(request.getLastRoomId() == null){
+            return ChatRoomListResponse.of(chatService.getChatRoomsLatest(userId, request.getSize()));
+        }
+        return ChatRoomListResponse.of(chatService.getChatRoomsAfter(userId, request.getLastRoomId(), request.getSize()));
     }
 }
