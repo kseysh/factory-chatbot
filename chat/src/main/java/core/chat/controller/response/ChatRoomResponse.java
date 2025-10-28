@@ -9,9 +9,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatRoomResponse {
-    Long roomId;
-    String roomName;
-    String date;
+    private Long roomId;
+    private String roomName;
+    private String date;
 
     public static ChatRoomResponse of(ChatRoom chatRoom) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy'년' M'월' d'일'");
