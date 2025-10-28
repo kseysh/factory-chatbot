@@ -19,6 +19,16 @@ public class ChatRepositoryImpl implements ChatRepository {
     }
 
     @Override
+    public List<ChatRoom> findAllByUserIdAfterRoomId(String userId, Long roomId, int limit) {
+        return chatRoomJpaRepository.findAllByUserIdAfterRoomId(userId, roomId, limit);
+    }
+
+    @Override
+    public List<ChatRoom> findAllByUserIdLatest(String userId, int limit) {
+        return chatRoomJpaRepository.findAllByUserIdLatest(userId, limit);
+    }
+
+    @Override
     public void insertChatRoomWithoutSelect(ChatRoom chatRoom) {
         em.persist(chatRoom);
     }

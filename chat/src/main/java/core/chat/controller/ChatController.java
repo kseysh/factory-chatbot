@@ -1,5 +1,7 @@
 package core.chat.controller;
 
+import core.chat.controller.request.ChatRoomListRequest;
+import core.chat.controller.response.ChatRoomListResponse;
 import core.global.auth.UserId;
 import core.chat.controller.request.ChatRequest;
 import core.chat.controller.request.CreateChatRoomRequest;
@@ -30,6 +32,14 @@ public class ChatController {
             @UserId String userId,
             @Valid @RequestBody CreateChatRoomRequest request) {
         return ResponseEntity.ok(chatFacade.startNewChat(userId, request));
+    }
+
+    @GetMapping("/v1/chat/room/list")
+    public ResponseEntity<ChatRoomListResponse> getChatRooms(
+            @UserId String userId,
+            @Valid @ModelAttribute ChatRoomListRequest request) {
+
+        return ResponseEntity.ok(chatFacade.getChatRooms(userId, request));
     }
 
     @GetMapping("/v1/mcp/health")
