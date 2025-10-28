@@ -33,12 +33,14 @@ public class ChatService {
         return chatRepository.existsByUserIdAndRoomId(userId, roomId);
     }
 
+    @Transactional(readOnly = true)
     public List<ChatRoomResponse> getChatRoomsLatest(String userId, int limit) {
         return chatRepository.findAllByUserIdLatest(userId, limit).stream()
                 .map(ChatRoomResponse::of)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<ChatRoomResponse> getChatRoomsAfter(String userId, Long lastRoomId, int limit) {
         return chatRepository.findAllByUserIdAfterRoomId(userId, lastRoomId, limit).stream()
                 .map(ChatRoomResponse::of)
