@@ -8,4 +8,7 @@ public interface ChatRepository {
 
     void insertChatRoomWithoutSelect(ChatRoom chatRoom);
     void insertChatHistoryWithoutSelect(ChatHistory chatHistory);
+
+    void deleteChatHistoryByRoomId(Long roomId);
+    void deleteChatRoomById(Long roomId);
 }
