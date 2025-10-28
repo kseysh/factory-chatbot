@@ -47,4 +47,12 @@ public class ChatFacade {
 
         return CreateChatRoomResponse.of(chatRoom.getName(), llmChat);
     }
+
+    public void deleteRoom(String userId, Long roomId) {
+        if (!chatService.checkIsValidRoomId(userId, roomId)) {
+            throw new IllegalArgumentException("Invalid room ID: " + roomId + " for user: " + userId);
+        }
+
+        chatService.deleteRoom(roomId);
+    }
 }

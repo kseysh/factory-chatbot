@@ -30,4 +30,10 @@ public class ChatService {
     public boolean checkIsValidRoomId(String userId, Long roomId) {
         return chatRepository.existsByUserIdAndRoomId(userId, roomId);
     }
+
+    @Transactional
+    public void deleteRoom(Long roomId) {
+        chatRepository.deleteChatHistoryByRoomId(roomId);
+        chatRepository.deleteChatRoomById(roomId);
+    }
 }
