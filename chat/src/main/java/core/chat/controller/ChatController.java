@@ -32,6 +32,12 @@ public class ChatController {
         return ResponseEntity.ok(chatFacade.startNewChat(userId, request));
     }
 
+    @DeleteMapping("/v1/chat/room")
+    public ResponseEntity<Void> deleteChatRoom(@UserId String userId, Long roomId) {
+        chatFacade.deleteRoom(userId, roomId);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/v1/mcp/health")
     public ResponseEntity<String> llmHealthCheck() {
         if(llmHealthCheckService.isLLMConnected()) return ResponseEntity.ok().build();
