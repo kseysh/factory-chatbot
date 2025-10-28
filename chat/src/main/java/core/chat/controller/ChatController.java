@@ -8,6 +8,8 @@ import core.chat.controller.response.CreateChatRoomResponse;
 import core.chat.service.ChatFacade;
 import core.mcpclient.service.LLMHealthCheckService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +35,8 @@ public class ChatController {
     }
 
     @DeleteMapping("/v1/chat/room")
-    public ResponseEntity<Void> deleteChatRoom(@UserId String userId, @RequestParam Long roomId) {
+    public ResponseEntity<Void> deleteChatRoom(@UserId String userId,
+            @NotNull @RequestParam Long roomId) {
         chatFacade.deleteRoom(userId, roomId);
         return ResponseEntity.noContent().build();
     }
