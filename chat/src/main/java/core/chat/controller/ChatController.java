@@ -37,7 +37,8 @@ public class ChatController {
     @GetMapping("/v1/chat/room/list")
     public ResponseEntity<ChatRoomListResponse> getChatRooms(
             @UserId String userId,
-            @RequestBody ChatRoomListRequest request) {
+            @Valid @ModelAttribute ChatRoomListRequest request) {
+
         return ResponseEntity.ok(chatFacade.getChatRooms(userId, request));
     }
 
