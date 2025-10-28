@@ -3,6 +3,7 @@ package core.chat.repository;
 import core.chat.entity.ChatHistory;
 import core.chat.entity.ChatRoom;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,16 @@ public class ChatRepositoryImpl implements ChatRepository {
     @Override
     public boolean existsByUserIdAndRoomId(String userId, Long roomId) {
         return chatRoomJpaRepository.existsByUserIdAndId(userId, roomId);
+    }
+
+    @Override
+    public List<ChatRoom> findAllByUserIdAfterRoomId(String userId, Long roomId, int limit) {
+        return chatRoomJpaRepository.findAllByUserIdAfterRoomId(userId, roomId, limit);
+    }
+
+    @Override
+    public List<ChatRoom> findAllByUserIdLatest(String userId, int limit) {
+        return chatRoomJpaRepository.findAllByUserIdLatest(userId, limit);
     }
 
     @Override

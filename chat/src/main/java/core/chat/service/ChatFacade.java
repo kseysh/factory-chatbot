@@ -1,8 +1,10 @@
 package core.chat.service;
 
 import core.chat.controller.request.ChatRequest;
+import core.chat.controller.request.ChatRoomListRequest;
 import core.chat.controller.request.CreateChatRoomRequest;
 import core.chat.controller.response.ChatResponse;
+import core.chat.controller.response.ChatRoomListResponse;
 import core.chat.controller.response.CreateChatRoomResponse;
 import core.chat.entity.ChatHistory;
 import core.chat.entity.ChatRoom;
@@ -46,5 +48,15 @@ public class ChatFacade {
         chatService.saveChatHistoryAndChatRoom(chatRoom, userChat, llmChat);
 
         return CreateChatRoomResponse.of(chatRoom.getName(), llmChat);
+    }
+
+    public ChatRoomListResponse getChatRooms(String userId, ChatRoomListRequest request) {
+        if(request.getLastRoomId() == null) {
+            return ChatRoomListResponse.of(chatService.getChatRoomsLatest(userId, request.getSize()));
+        }
+
+        return ChatRoomListResponse.of(
+                chatService.getChatRoomsAfter(userId, request.getLastRoomId(), request.getSize())
+        );
     }
 }
