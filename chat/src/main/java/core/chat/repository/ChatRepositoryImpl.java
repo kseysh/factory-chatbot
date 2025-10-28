@@ -3,7 +3,6 @@ package core.chat.repository;
 import core.chat.entity.ChatHistory;
 import core.chat.entity.ChatRoom;
 import jakarta.persistence.EntityManager;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
