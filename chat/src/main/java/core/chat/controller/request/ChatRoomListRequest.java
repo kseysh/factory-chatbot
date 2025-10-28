@@ -2,17 +2,19 @@ package core.chat.controller.request;
 
 import jakarta.annotation.Nullable;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class ChatRoomListRequest {
     private static final int DEFAULT_CHAT_ROOMS_SIZE = 20;
     private static final int MIN_CHAT_ROOM_PAGE_SIZE = 1;
     private static final int MAX_CHAT_ROOM_PAGE_SIZE = 100;
 
     @Nullable
-    private final Long lastRoomId;
+    private Long lastRoomId;
 
-    private final int size;
+    private int size;
 
     public ChatRoomListRequest(@Nullable Long lastRoomId, Integer size) {
         this.lastRoomId = lastRoomId;
