@@ -33,7 +33,7 @@ public class ChatController {
     }
 
     @DeleteMapping("/v1/chat/room")
-    public ResponseEntity<Void> deleteChatRoom(@UserId String userId, Long roomId) {
+    public ResponseEntity<Void> deleteChatRoom(@UserId String userId, @RequestParam Long roomId) {
         chatFacade.deleteRoom(userId, roomId);
         return ResponseEntity.noContent().build();
     }
