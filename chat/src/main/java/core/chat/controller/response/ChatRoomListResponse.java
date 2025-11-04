@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatRoomListResponse {
-    List<ChatRoomResponse> chatRooms;
+    private List<ChatRoomResponse> chatRooms;
 
     public static ChatRoomListResponse of(List<ChatRoomResponse> chatRooms) {
         return new ChatRoomListResponse(chatRooms);
