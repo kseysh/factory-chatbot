@@ -1,6 +1,8 @@
 package core.chat.controller.request;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,13 +16,7 @@ public class ChatRoomListRequest {
     @Nullable
     private Long lastRoomId;
 
-    private int size;
-
-    public ChatRoomListRequest(@Nullable Long lastRoomId, Integer size) {
-        this.lastRoomId = lastRoomId;
-        this.size = size == null ? DEFAULT_CHAT_ROOMS_SIZE : size;
-        if(this.size < MIN_CHAT_ROOM_PAGE_SIZE || this.size > MAX_CHAT_ROOM_PAGE_SIZE){
-            throw new IllegalArgumentException("size must be between 1 and 100");
-        }
-    }
+    @Min(MIN_CHAT_ROOM_PAGE_SIZE)
+    @Max(MAX_CHAT_ROOM_PAGE_SIZE)
+    private int size = DEFAULT_CHAT_ROOMS_SIZE;
 }
