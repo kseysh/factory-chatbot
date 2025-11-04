@@ -12,10 +12,14 @@ public interface ChatRoomJpaRepository extends JpaRepository<ChatRoom, Long> {
     boolean existsByUserIdAndId(String userId, Long roomId);
 
     @Query("SELECT c FROM ChatRoom c WHERE c.userId = :userId AND c.id < :lastRoomId ORDER BY c.id DESC LIMIT :limit")
-    List<ChatRoom> findAllByUserIdAfterRoomId(String userId, Long lastRoomId, int limit);
+    List<ChatRoom> findAllByUserIdAfterRoomId(
+            @Param("userId") String userId,
+            @Param("lastRoomId") Long lastRoomId,
+            @Param("limit") int limit
+    );
 
     @Query("SELECT c FROM ChatRoom c WHERE c.userId = :userId ORDER BY c.id DESC LIMIT :limit")
-    List<ChatRoom> findAllByUserIdLatest(String userId, int limit);
+    List<ChatRoom> findAllByUserIdLatest(@Param("userId") String userId, @Param("limit") int limit);
 
     @Modifying
     @Query("DELETE FROM ChatRoom cr WHERE cr.id = :id")
