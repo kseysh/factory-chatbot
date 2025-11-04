@@ -3,11 +3,12 @@ package core.chat.controller.request;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class ChatRoomListRequest {
     private static final int DEFAULT_CHAT_ROOMS_SIZE = 20;
     private static final int MIN_CHAT_ROOM_PAGE_SIZE = 1;
