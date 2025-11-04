@@ -46,4 +46,10 @@ public class ChatService {
                 .map(ChatRoomResponse::of)
                 .toList();
     }
+
+    @Transactional
+    public void deleteRoom(Long roomId) {
+        chatRepository.deleteChatHistoryByRoomId(roomId);
+        chatRepository.deleteChatRoomById(roomId);
+    }
 }

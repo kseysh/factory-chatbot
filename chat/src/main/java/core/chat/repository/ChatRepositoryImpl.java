@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ChatRepositoryImpl implements ChatRepository {
     private final ChatRoomJpaRepository chatRoomJpaRepository;
+    private final ChatHistoryJpaRepository chatHistoryJpaRepository;
     private final EntityManager em;
 
     @Override
@@ -36,6 +37,16 @@ public class ChatRepositoryImpl implements ChatRepository {
     @Override
     public void insertChatHistoryWithoutSelect(ChatHistory chatHistory){
         em.persist(chatHistory);
+    }
+
+    @Override
+    public void deleteChatHistoryByRoomId(Long roomId) {
+        chatHistoryJpaRepository.deleteByRoomId(roomId);
+    }
+
+    @Override
+    public void deleteChatRoomById(Long roomId) {
+        chatRoomJpaRepository.deleteById(roomId);
     }
 
 }

@@ -1,11 +1,7 @@
 package core.chat.service;
 
-import core.chat.controller.request.ChatRequest;
-import core.chat.controller.request.ChatRoomListRequest;
-import core.chat.controller.request.CreateChatRoomRequest;
-import core.chat.controller.response.ChatResponse;
-import core.chat.controller.response.ChatRoomListResponse;
-import core.chat.controller.response.CreateChatRoomResponse;
+import core.chat.controller.request.*;
+import core.chat.controller.response.*;
 import core.chat.entity.ChatHistory;
 import core.chat.entity.ChatRoom;
 import core.common.snowflake.Snowflake;
@@ -55,5 +51,13 @@ public class ChatFacade {
             return ChatRoomListResponse.of(chatService.getChatRoomsLatest(userId, request.getSize()));
         }
         return ChatRoomListResponse.of(chatService.getChatRoomsAfter(userId, request.getLastRoomId(), request.getSize()));
+    }
+
+    public void deleteRoom(String userId, Long roomId) {
+        if (!chatService.checkIsValidRoomId(userId, roomId)) {
+            throw new IllegalArgumentException("Invalid room ID: " + roomId + " for user: " + userId);
+        }
+
+        chatService.deleteRoom(roomId);
     }
 }
