@@ -1,5 +1,7 @@
 package core.chat.controller;
 
+import core.chat.controller.request.ChatRoomListRequest;
+import core.chat.controller.response.ChatRoomListResponse;
 import core.global.auth.UserId;
 import core.chat.controller.request.ChatRequest;
 import core.chat.controller.request.CreateChatRoomRequest;
@@ -9,7 +11,6 @@ import core.chat.service.ChatFacade;
 import core.mcpclient.service.LLMHealthCheckService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,14 @@ public class ChatController {
             @NotNull @RequestParam Long roomId) {
         chatFacade.deleteRoom(userId, roomId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/v1/chat/room/list")
+    public ResponseEntity<ChatRoomListResponse> getChatRooms(
+            @UserId String userId,
+            @Valid @ModelAttribute ChatRoomListRequest request) {
+
+        return ResponseEntity.ok(chatFacade.getChatRooms(userId, request));
     }
 
     @GetMapping("/v1/mcp/health")
