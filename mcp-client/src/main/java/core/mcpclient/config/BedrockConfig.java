@@ -1,12 +1,14 @@
 package core.mcpclient.config;
 
 import core.mcpclient.config.properties.BedrockProperties;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.bedrock.converse.BedrockProxyChatModel;
 import org.springframework.ai.bedrock.converse.BedrockChatOptions;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.model.bedrock.autoconfigure.BedrockAwsConnectionProperties;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +26,7 @@ import java.time.Duration;
 @Profile("prod")
 public class BedrockConfig {
 
+    private final ToolCallbackProvider toolCallbackProvider;
     private final BedrockProperties bedrockProperties;
     private final BedrockAwsConnectionProperties awsConnectionProperties;
 
@@ -86,8 +89,9 @@ public class BedrockConfig {
         log.info("🤔 Creating ChatClient ===");
         log.info("📝 Model ID from options: {}", chatModel.getDefaultOptions().getModel());
 
-        ChatClient client = ChatClient.builder(chatModel).build();
-
+        ChatClient client = ChatClient.builder(chatModel).defaultToolCallbacks(toolCallbackProvider).build();
+        log.info("사용할 수 있는 Tool: ");
+        log.info(Arrays.toString(toolCallbackProvider.getToolCallbacks()));
         log.info("✅ ChatClient created\n");
         return client;
     }
