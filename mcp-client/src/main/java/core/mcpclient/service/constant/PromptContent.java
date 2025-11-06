@@ -18,7 +18,7 @@ public enum PromptContent {
             + "Example: {\"roomName\":\"질문 요약 3~5단어\",\"answer\":\"상세한 답변\"}"
     ),
     SYSTEM_PROMPT_DEFAULT_CHAT(
-           ""
+           "Tool을 적극적으로 활용하세요" // SYSTEM_PROMPT_DEFAULT_CHAT은 Null이거나 빈칸이면 안됩니다.
     );
 
     // USER_PROMPT
