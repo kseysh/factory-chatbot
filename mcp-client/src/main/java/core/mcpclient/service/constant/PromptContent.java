@@ -16,6 +16,9 @@ public enum PromptContent {
             + "\"answer\": a detailed answer. "
             + "Do NOT include code fences, explanations, or extra fields. "
             + "Example: {\"roomName\":\"질문 요약 3~5단어\",\"answer\":\"상세한 답변\"}"
+    ),
+    SYSTEM_PROMPT_DEFAULT_CHAT(
+           ""
     );
 
     // USER_PROMPT

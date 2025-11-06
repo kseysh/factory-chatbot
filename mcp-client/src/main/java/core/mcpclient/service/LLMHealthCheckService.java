@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LLMHealthCheckService {
 
-    private final ChatModel chatModel;
     private final ChatClient chatClient;
 
     public boolean isLLMConnected() {
