@@ -38,7 +38,6 @@ public class LLMService {
 
         NewChatRoomInfo response = chatClient.prompt(new Prompt(chatMemory.get(conversationId)))
                 .system(PromptContent.SYSTEM_PROMPT_CREATE_NEW_CHAT.getContent())
-                .system(PromptContent.SYSTEM_PROMPT_DEFAULT_CHAT.getContent())
                 .call()
                 .entity(NewChatRoomInfo.class);
         chatMemory.add(conversationId, new AssistantMessage(response.answer()));
