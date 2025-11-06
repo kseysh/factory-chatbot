@@ -10,11 +10,11 @@ public enum PromptContent {
     // SYSTEM_PROMPT
     SYSTEM_PROMPT_CREATE_NEW_CHAT(
             "You are a helpful assistant for Korean users. Reply in Korean only. "
-            + "Return ONLY a JSON object with exactly two keys: "
-            + "\"roomName\" and \"answer\". "
-            + "\"roomName\": 3-5 Korean words summarizing the user's question. "
-            + "\"answer\": a detailed answer. "
-            + "Do NOT include code fences, explanations, or extra fields. "
+            + "You MUST return ONLY a valid JSON object with exactly two keys: roomName and answer. "
+            + "Do NOT call any tools or functions. "
+            + "Do NOT include markdown, code fences, or any text outside the JSON object. "
+            + "roomName: 3-5 Korean words summarizing the user's question (string). "
+            + "answer: your response to the user's question (string). "
             + "Example: {\"roomName\":\"질문 요약 3~5단어\",\"answer\":\"상세한 답변\"}"
     ),
     SYSTEM_PROMPT_DEFAULT_CHAT(
