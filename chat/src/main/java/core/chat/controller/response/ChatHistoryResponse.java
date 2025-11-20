@@ -1,6 +1,7 @@
 package core.chat.controller.response;
 
-import core.chat.service.dto.ChatHistoryDto;
+import core.chat.entity.ChatHistory;
+import core.chat.entity.MessageType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,11 +13,11 @@ public class ChatHistoryResponse {
     private final String content;
     private final Boolean isChatbot;
 
-    public static ChatHistoryResponse of(ChatHistoryDto chatHistoryDto) {
+    public static ChatHistoryResponse of(ChatHistory chatHistory) {
         return new ChatHistoryResponse(
-                chatHistoryDto.getChatId(),
-                chatHistoryDto.getContent(),
-                chatHistoryDto.getIsChatbot()
+                chatHistory.getId(),
+                chatHistory.getContent(),
+                chatHistory.getType() == MessageType.LLM
         );
     }
 }

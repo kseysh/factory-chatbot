@@ -1,7 +1,6 @@
 package core.chat.repository;
 
 import core.chat.entity.ChatHistory;
-import core.chat.service.dto.ChatHistoryDto;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +24,12 @@ public class ChatHistoryRepositoryImpl implements ChatHistoryRepository {
     }
 
     @Override
-    public List<ChatHistoryDto> findAllByRoomIdLatest(Long roomId, Integer limit) {
-        return chatHistoryJpaRepository.findAllByRoomIdLatest(roomId, limit)
-                .stream().map(ChatHistoryDto::of).toList();
+    public List<ChatHistory> findAllByRoomIdLatest(Long roomId, Integer limit) {
+        return chatHistoryJpaRepository.findAllByRoomIdLatest(roomId, limit);
     }
 
     @Override
-    public List<ChatHistoryDto> findAllByRoomIdAfterChatId(Long roomId, Long lastChatId, Integer limit) {
-        return chatHistoryJpaRepository.findAllByRoomIdAfterChatId(roomId, lastChatId, limit)
-                .stream().map(ChatHistoryDto::of).toList();
+    public List<ChatHistory> findAllByRoomIdAfterChatId(Long roomId, Long lastChatId, Integer limit) {
+        return chatHistoryJpaRepository.findAllByRoomIdAfterChatId(roomId, lastChatId, limit);
     }
 }

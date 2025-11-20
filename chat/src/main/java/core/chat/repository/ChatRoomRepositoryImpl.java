@@ -1,7 +1,6 @@
 package core.chat.repository;
 
 import core.chat.entity.ChatRoom;
-import core.chat.service.dto.ChatRoomDto;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +20,8 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
-    public Optional<ChatRoomDto> findByRoomId(Long roomId){
-        Optional<ChatRoom> optionalChatRoom = chatRoomJpaRepository.findById(roomId);
-        return optionalChatRoom.map(ChatRoomDto::of);
+    public Optional<ChatRoom> findByRoomId(Long roomId){
+        return chatRoomJpaRepository.findById(roomId);
     }
 
     @Override

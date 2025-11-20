@@ -1,7 +1,6 @@
 package core.chat.repository;
 
 import core.chat.entity.ChatHistory;
-import core.chat.service.dto.ChatHistoryDto;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +10,7 @@ public interface ChatHistoryRepository {
 
     void deleteChatHistoryByRoomId(Long roomId);
 
-    List<ChatHistoryDto> findAllByRoomIdLatest(Long roomId, Integer limit);
+    List<ChatHistory> findAllByRoomIdLatest(Long roomId, Integer limit);
 
-    List<ChatHistoryDto> findAllByRoomIdAfterChatId(Long roomId, Long lastChatId, Integer limit);
+    List<ChatHistory> findAllByRoomIdAfterChatId(Long roomId, Long lastChatId, Integer limit);
 }

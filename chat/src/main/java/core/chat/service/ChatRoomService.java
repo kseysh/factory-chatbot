@@ -23,7 +23,7 @@ public class ChatRoomService {
 
     @Transactional(readOnly = true)
     public Optional<ChatRoomDto> findChatRoomByRoomId(Long roomId) {
-        return chatRoomRepository.findByRoomId(roomId);
+        return chatRoomRepository.findByRoomId(roomId).map(ChatRoomDto::of);
     }
 
     @Transactional(readOnly = true)
