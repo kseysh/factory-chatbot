@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatHistoriesResponse {
     private Long roomId;
-    private List<ChatHistoryResponse> chatRooms;
+    private List<ChatHistoryResponse> chattings;
 
     public static ChatHistoriesResponse of(Long roomId, List<ChatHistoryResponse> chatRooms) {
         return new ChatHistoriesResponse(roomId, chatRooms);
