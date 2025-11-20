@@ -16,23 +16,25 @@ public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
 
-    @Transactional(readOnly = true)
-    public boolean checkIsValidRoomId(String userId, Long roomId) {
-        Optional<ChatRoomDto> optionalChatRoomDto = chatRoomRepository.findChatRoomByRoomId(roomId);
-        return optionalChatRoomDto.map(
-                chatRoomDto -> chatRoomDto.getUserId().equals(userId)
-        ).orElse(true);
+    @Transactional
+    public void saveChatRoom(ChatRoom chatRoom) {
+        chatRoomRepository.insertWithoutSelect(chatRoom);
     }
 
     @Transactional(readOnly = true)
-    public List<ChatRoomResponse> getChatRoomsLatest(String userId, int limit) {
+    public Optional<ChatRoomDto> findChatRoomByRoomId(Long roomId) {
+        return chatRoomRepository.findByRoomId(roomId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ChatRoomResponse> findChatRoomsLatest(String userId, int limit) {
         return chatRoomRepository.findAllByUserIdLatest(userId, limit).stream()
                 .map(ChatRoomResponse::of)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<ChatRoomResponse> getChatRoomsAfter(String userId, Long lastRoomId, int limit) {
+    public List<ChatRoomResponse> findChatRoomsAfter(String userId, Long lastRoomId, int limit) {
         return chatRoomRepository.findAllByUserIdAfterRoomId(userId, lastRoomId, limit).stream()
                 .map(ChatRoomResponse::of)
                 .toList();
@@ -40,11 +42,11 @@ public class ChatRoomService {
 
     @Transactional
     public void deleteRoom(Long roomId) {
-        chatRoomRepository.deleteChatRoomById(roomId);
+        chatRoomRepository.deleteById(roomId);
     }
 
-    @Transactional
-    public void saveChatRoom(ChatRoom chatRoom) {
-        chatRoomRepository.insertChatRoomWithoutSelect(chatRoom);
+    @Transactional(readOnly = true)
+    public boolean canUserAccessRoom(Long roomId, String userId) {
+        return chatRoomRepository.existsByRoomIdAndUserId(roomId, userId);
     }
 }

@@ -8,11 +8,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChatRoomRepository {
-    Optional<ChatRoomDto> findChatRoomByRoomId(Long roomId);
+    Optional<ChatRoomDto> findByRoomId(Long roomId);
 
     List<ChatRoom> findAllByUserIdAfterRoomId(String userId, Long roomId, int size);
     List<ChatRoom> findAllByUserIdLatest(String userId, int size);
 
-    void insertChatRoomWithoutSelect(ChatRoom chatRoom);
-    void deleteChatRoomById(Long roomId);
+    void insertWithoutSelect(ChatRoom chatRoom);
+    void deleteById(Long roomId);
+
+    boolean existsByRoomIdAndUserId(Long roomId, String userId);
 }

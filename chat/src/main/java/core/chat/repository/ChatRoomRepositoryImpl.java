@@ -16,12 +16,12 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     private final EntityManager em;
 
     @Override
-    public void insertChatRoomWithoutSelect(ChatRoom chatRoom) {
+    public void insertWithoutSelect(ChatRoom chatRoom) {
         em.persist(chatRoom);
     }
 
     @Override
-    public Optional<ChatRoomDto> findChatRoomByRoomId(Long roomId){
+    public Optional<ChatRoomDto> findByRoomId(Long roomId){
         Optional<ChatRoom> optionalChatRoom = chatRoomJpaRepository.findById(roomId);
         return optionalChatRoom.map(ChatRoomDto::of);
     }
@@ -37,7 +37,12 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
-    public void deleteChatRoomById(Long roomId) {
+    public void deleteById(Long roomId) {
         chatRoomJpaRepository.deleteById(roomId);
+    }
+
+    @Override
+    public boolean existsByRoomIdAndUserId(Long roomId, String userId) {
+        return chatRoomJpaRepository.existsByIdAndUserId(roomId, userId);
     }
 }

@@ -4,9 +4,11 @@ import core.chat.controller.request.*;
 import core.chat.controller.response.*;
 import core.chat.entity.ChatHistory;
 import core.chat.entity.ChatRoom;
+import core.chat.service.dto.ChatRoomDto;
 import core.common.snowflake.Snowflake;
 import core.mcpclient.service.dto.NewChatRoomInfo;
 import core.mcpclient.service.LLMService;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +24,7 @@ public class ChatFacade {
     @Transactional
     public ChatResponse chat(String userId, ChatRequest chatRequest) {
         Long roomId = chatRequest.getRoomId();
-        if (!chatRoomService.checkIsValidRoomId(userId, roomId)) {
+        if (!chatRoomService.canUserAccessRoom(roomId, userId)) {
             throw new IllegalArgumentException("Invalid room ID: " + roomId + " for user: " + userId);
         }
         String question = chatRequest.getQuestion();
@@ -53,7 +55,7 @@ public class ChatFacade {
 
     @Transactional(readOnly = true)
     public ChatHistoriesResponse getChatHistories(String userId, ChatHistoryRequest request) {
-        if (!chatRoomService.checkIsValidRoomId(userId, request.getRoomId())) {
+        if (!chatRoomService.canUserAccessRoom(request.getRoomId(), userId)) {
             throw new IllegalArgumentException("Invalid room ID: " + request.getRoomId() + " for user: " + userId);
         }
 
@@ -73,21 +75,23 @@ public class ChatFacade {
     public ChatRoomListResponse getChatRooms(String userId, ChatRoomListRequest request) {
         if(request.getLastRoomId() == null){
             return ChatRoomListResponse.of(
-                    chatRoomService.getChatRoomsLatest(userId, request.getSize())
+                    chatRoomService.findChatRoomsLatest(userId, request.getSize())
             );
         }
         return ChatRoomListResponse.of(
-                chatRoomService.getChatRoomsAfter(userId, request.getLastRoomId(), request.getSize())
+                chatRoomService.findChatRoomsAfter(userId, request.getLastRoomId(), request.getSize())
         );
     }
 
     @Transactional
     public void deleteRoom(String userId, Long roomId) {
-        if (!chatRoomService.checkIsValidRoomId(userId, roomId)) {
+        Optional<ChatRoomDto> optionalChatRoomDto = chatRoomService.findChatRoomByRoomId(roomId);
+        if(optionalChatRoomDto.isEmpty()) return;
+        if(optionalChatRoomDto.get().getUserId().equals(userId)) {
+            chatRoomService.deleteRoom(roomId);
+            chatHistoryService.deleteChatHistoryByRoomId(roomId);
+        }else{
             throw new IllegalArgumentException("Invalid room ID: " + roomId + " for user: " + userId);
         }
-
-        chatRoomService.deleteRoom(roomId);
-        chatHistoryService.deleteChatHistoryByRoomId(roomId);
     }
 }
