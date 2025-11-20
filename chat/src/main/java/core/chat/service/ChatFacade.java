@@ -85,13 +85,17 @@ public class ChatFacade {
 
     @Transactional
     public void deleteRoom(String userId, Long roomId) {
-        Optional<ChatRoomDto> optionalChatRoomDto = chatRoomService.findChatRoomByRoomId(roomId);
-        if(optionalChatRoomDto.isEmpty()) return;
-        if(optionalChatRoomDto.get().getUserId().equals(userId)) {
+        if(checkUserCanDeleteRoom(userId, roomId)){
             chatRoomService.deleteRoom(roomId);
             chatHistoryService.deleteChatHistoryByRoomId(roomId);
         }else{
-            throw new IllegalArgumentException("Invalid room ID: " + roomId + " for user: " + userId);
+            throw new IllegalArgumentException("Room Id(" + roomId + ")를 삭제할 권한이 " + userId + "에게 존재하지 않습니다.");
         }
+    }
+
+    private boolean checkUserCanDeleteRoom(String userId, Long roomId) {
+        return chatRoomService.findChatRoomByRoomId(roomId).map(
+                chatRoomDto -> chatRoomDto.getUserId().equals(userId)
+        ).orElse(true);
     }
 }
