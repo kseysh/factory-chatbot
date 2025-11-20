@@ -49,8 +49,11 @@ public class LLMService {
     }
 
     private void checkLlmResponse(CallResponseSpec response) {
+        if(response == null) {
+            throw new IllegalArgumentException("LLM response is null");
+        }
         String content = response.content();
-        if (content == null || content.trim().isEmpty()) {
+        if (content == null || content.trim().isEmpty()){
             throw new IllegalArgumentException("LLM response content is null or empty");
         }
     }

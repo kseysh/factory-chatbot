@@ -19,8 +19,8 @@ public interface ChatRoomJpaRepository extends JpaRepository<ChatRoom, Long> {
     @Query("SELECT c FROM ChatRoom c WHERE c.userId = :userId ORDER BY c.id DESC LIMIT :limit")
     List<ChatRoom> findAllByUserIdLatest(@Param("userId") String userId, @Param("limit") int limit);
 
-    @Modifying
-    @Query("DELETE FROM ChatRoom cr WHERE cr.id = :id")
+    @Modifying(clearAutomatically = true)
+    @Query("DELETE FROM ChatRoom c WHERE c.id = :id")
     void deleteById(@Param("id") Long id);
 
     boolean existsByIdAndUserId(Long id, String userId);
