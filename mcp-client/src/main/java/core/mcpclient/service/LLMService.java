@@ -24,10 +24,11 @@ public class LLMService {
     @Transactional
     public String chat(Long roomId, String question) {
         String conversationId = roomId.toString();
-        CallResponseSpec response = chatClient.prompt(new Prompt(chatMemory.get(conversationId))).call();
-        String answer = response.content();
-
         chatMemory.add(conversationId, new UserMessage(question));
+        CallResponseSpec response = chatClient.prompt(new Prompt(chatMemory.get(conversationId))).call();
+        checkLlmResponse(response);
+
+        String answer = response.content();
         chatMemory.add(conversationId, new AssistantMessage(answer));
         return answer;
     }
@@ -36,14 +37,22 @@ public class LLMService {
     public NewChatRoomInfo startNewChat(Long roomId, String question) {
         String conversationId = roomId.toString();
 
+        chatMemory.add(conversationId, new UserMessage(question));
         CallResponseSpec response = chatClient.prompt(new Prompt(chatMemory.get(conversationId)))
                 .system(PromptContent.SYSTEM_PROMPT_CREATE_NEW_CHAT.getContent())
                 .call();
+        checkLlmResponse(response);
         NewChatRoomInfo answerDto = response.entity(NewChatRoomInfo.class);
 
-        chatMemory.add(conversationId, new UserMessage(question));
         chatMemory.add(conversationId, new AssistantMessage(response.content()));
         return answerDto;
+    }
+
+    private void checkLlmResponse(CallResponseSpec response) {
+        String content = response.content();
+        if (content == null || content.trim().isEmpty()) {
+            throw new IllegalArgumentException("LLM response content is null or empty");
+        }
     }
 
 }
