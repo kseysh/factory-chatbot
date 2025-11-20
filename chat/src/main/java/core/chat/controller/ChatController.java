@@ -2,7 +2,7 @@ package core.chat.controller;
 
 import core.chat.controller.request.ChatHistoryRequest;
 import core.chat.controller.request.ChatRoomListRequest;
-import core.chat.controller.response.ChatHistoryResponse;
+import core.chat.controller.response.ChatHistoriesResponse;
 import core.chat.controller.response.ChatRoomListResponse;
 import core.global.auth.UserId;
 import core.chat.controller.request.ChatRequest;
@@ -23,18 +23,26 @@ public class ChatController {
     private final LLMHealthCheckService llmHealthCheckService;
     private final ChatFacade chatFacade;
 
-    @GetMapping("/v1/chat")
-    public ResponseEntity<ChatHistoryResponse> getChatHistory(
-            @UserId String userId,
-            @Valid @ModelAttribute ChatHistoryRequest request) {
-        return ResponseEntity.ok(chatFacade.getChatHistory(userId, request));
-    }
-
     @PostMapping("/v1/chat")
     public ResponseEntity<ChatResponse> chat(
             @UserId String userId,
             @Valid @RequestBody ChatRequest request) {
         return ResponseEntity.ok(chatFacade.chat(userId, request));
+    }
+
+    @PostMapping("/v1/chat/room/create")
+    public ResponseEntity<CreateChatRoomResponse> createChatRoom(
+            @UserId String userId,
+            @Valid @RequestBody CreateChatRoomRequest request
+    ) {
+        return ResponseEntity.ok(chatFacade.startNewChat(userId, request));
+    }
+
+    @GetMapping("/v1/chat")
+    public ResponseEntity<ChatHistoriesResponse> getChatHistory(
+            @UserId String userId,
+            @Valid @ModelAttribute ChatHistoryRequest request) {
+        return ResponseEntity.ok(chatFacade.getChatHistories(userId, request));
     }
 
     @GetMapping("/v1/chat/room/list")
@@ -45,16 +53,11 @@ public class ChatController {
         return ResponseEntity.ok(chatFacade.getChatRooms(userId, request));
     }
 
-    @PostMapping("/v1/chat/room/create")
-    public ResponseEntity<CreateChatRoomResponse> createChatRoom(
-            @UserId String userId,
-            @Valid @RequestBody CreateChatRoomRequest request) {
-        return ResponseEntity.ok(chatFacade.startNewChat(userId, request));
-    }
-
     @DeleteMapping("/v1/chat/room")
-    public ResponseEntity<Void> deleteChatRoom(@UserId String userId,
-            @NotNull @RequestParam Long roomId) {
+    public ResponseEntity<Void> deleteChatRoom(
+            @UserId String userId,
+            @NotNull @RequestParam Long roomId
+    ) {
         chatFacade.deleteRoom(userId, roomId);
         return ResponseEntity.noContent().build();
     }

@@ -21,7 +21,7 @@ public class ChatHistoryRequest {
     @Min(MIN_CHATS_PAGE_SIZE)
     @Max(MAX_CHATS_PAGE_SIZE)
     @Nullable
-    private Integer size;
+    private final Integer size;
 
     public ChatHistoryRequest(Long roomId, @Nullable Long lastChatId, @Nullable Integer size) {
         if (size == null) this.size = DEFAULT_CHAT_SIZE;

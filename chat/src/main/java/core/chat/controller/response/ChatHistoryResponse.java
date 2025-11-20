@@ -1,7 +1,6 @@
 package core.chat.controller.response;
 
 import core.chat.service.dto.ChatHistoryDto;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +8,15 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatHistoryResponse {
-    private Long roomId;
-    private List<ChatHistoryDto> chatRooms;
+    private final Long chatId;
+    private final String content;
+    private final Boolean isChatbot;
 
-    public static ChatHistoryResponse of(Long roomId, List<ChatHistoryDto> chatRooms) {
-        return new ChatHistoryResponse(roomId, chatRooms);
+    public static ChatHistoryResponse of(ChatHistoryDto chatHistoryDto) {
+        return new ChatHistoryResponse(
+                chatHistoryDto.getChatId(),
+                chatHistoryDto.getContent(),
+                chatHistoryDto.getIsChatbot()
+        );
     }
 }
