@@ -2,14 +2,12 @@ package core.chat.repository;
 
 import core.chat.entity.ChatRoom;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ChatRoomJpaRepository extends JpaRepository<ChatRoom, Long> {
-    Optional<ChatRoom> findById(Long id);
 
     @Query("SELECT c FROM ChatRoom c WHERE c.userId = :userId AND c.id < :lastRoomId ORDER BY c.id DESC LIMIT :limit")
     List<ChatRoom> findAllByUserIdAfterRoomId(

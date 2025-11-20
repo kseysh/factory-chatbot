@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChatRoomRepository {
+
     Optional<ChatRoom> findByRoomId(Long roomId);
 
     List<ChatRoom> findAllByUserIdAfterRoomId(String userId, Long roomId, int size);
