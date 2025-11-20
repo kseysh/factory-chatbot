@@ -1,3 +1,11 @@
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
 dependencies {
     implementation 'org.springframework.ai:spring-ai-starter-mcp-client'
 //    implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
@@ -5,4 +13,6 @@ dependencies {
 
     implementation 'org.springframework.ai:spring-ai-starter-model-chat-memory-repository-jdbc'
     runtimeOnly 'org.postgresql:postgresql'
+
+    implementation project(':mcp-db-server')
 }
