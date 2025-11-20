@@ -8,13 +8,13 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ChatHistoryInfo {
+public class ChatHistoryDto {
     private final Long chatId;
     private final String content;
     private final Boolean isChatbot;
 
-    public static ChatHistoryInfo of(ChatHistory chatHistory) {
+    public static ChatHistoryDto of(ChatHistory chatHistory) {
         boolean isChatbot = chatHistory.getType() == MessageType.LLM;
-        return new ChatHistoryInfo(chatHistory.getId(), chatHistory.getContent(), isChatbot);
+        return new ChatHistoryDto(chatHistory.getId(), chatHistory.getContent(), isChatbot);
     }
 }
