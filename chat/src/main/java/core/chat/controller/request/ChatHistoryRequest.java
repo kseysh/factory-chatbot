@@ -24,8 +24,7 @@ public class ChatHistoryRequest {
     private final Integer size;
 
     public ChatHistoryRequest(Long roomId, @Nullable Long lastChatId, @Nullable Integer size) {
-        if (size == null) this.size = DEFAULT_CHAT_SIZE;
-        else this.size = size;
+        this.size = (size == null) ? DEFAULT_CHAT_SIZE : size;
         this.roomId = roomId;
         this.lastChatId = lastChatId;
     }
