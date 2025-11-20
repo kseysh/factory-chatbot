@@ -9,8 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface ChatRoomJpaRepository extends JpaRepository<ChatRoom, Long> {
 
-    boolean existsByUserIdAndId(String userId, Long roomId);
-
     @Query("SELECT c FROM ChatRoom c WHERE c.userId = :userId AND c.id < :lastRoomId ORDER BY c.id DESC LIMIT :limit")
     List<ChatRoom> findAllByUserIdAfterRoomId(
             @Param("userId") String userId,
@@ -25,4 +23,5 @@ public interface ChatRoomJpaRepository extends JpaRepository<ChatRoom, Long> {
     @Query("DELETE FROM ChatRoom cr WHERE cr.id = :id")
     void deleteById(@Param("id") Long id);
 
+    boolean existsByIdAndUserId(Long id, String userId);
 }

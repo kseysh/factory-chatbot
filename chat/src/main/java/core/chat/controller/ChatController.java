@@ -1,6 +1,8 @@
 package core.chat.controller;
 
+import core.chat.controller.request.ChatHistoryRequest;
 import core.chat.controller.request.ChatRoomListRequest;
+import core.chat.controller.response.ChatHistoriesResponse;
 import core.chat.controller.response.ChatRoomListResponse;
 import core.global.auth.UserId;
 import core.chat.controller.request.ChatRequest;
@@ -31,15 +33,16 @@ public class ChatController {
     @PostMapping("/v1/chat/room/create")
     public ResponseEntity<CreateChatRoomResponse> createChatRoom(
             @UserId String userId,
-            @Valid @RequestBody CreateChatRoomRequest request) {
+            @Valid @RequestBody CreateChatRoomRequest request
+    ) {
         return ResponseEntity.ok(chatFacade.startNewChat(userId, request));
     }
 
-    @DeleteMapping("/v1/chat/room")
-    public ResponseEntity<Void> deleteChatRoom(@UserId String userId,
-            @NotNull @RequestParam Long roomId) {
-        chatFacade.deleteRoom(userId, roomId);
-        return ResponseEntity.noContent().build();
+    @GetMapping("/v1/chat")
+    public ResponseEntity<ChatHistoriesResponse> getChatHistory(
+            @UserId String userId,
+            @Valid @ModelAttribute ChatHistoryRequest request) {
+        return ResponseEntity.ok(chatFacade.getChatHistories(userId, request));
     }
 
     @GetMapping("/v1/chat/room/list")
@@ -48,6 +51,15 @@ public class ChatController {
             @Valid @ModelAttribute ChatRoomListRequest request) {
 
         return ResponseEntity.ok(chatFacade.getChatRooms(userId, request));
+    }
+
+    @DeleteMapping("/v1/chat/room")
+    public ResponseEntity<Void> deleteChatRoom(
+            @UserId String userId,
+            @NotNull @RequestParam Long roomId
+    ) {
+        chatFacade.deleteRoom(userId, roomId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/v1/mcp/health")

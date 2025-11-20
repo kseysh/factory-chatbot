@@ -1,22 +1,27 @@
 package core.chat.repository;
 
-import core.chat.entity.ChatHistory;
 import core.chat.entity.ChatRoom;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class ChatRepositoryImpl implements ChatRepository {
+public class ChatRoomRepositoryImpl implements ChatRoomRepository {
+
     private final ChatRoomJpaRepository chatRoomJpaRepository;
-    private final ChatHistoryJpaRepository chatHistoryJpaRepository;
     private final EntityManager em;
 
     @Override
-    public boolean existsByUserIdAndRoomId(String userId, Long roomId) {
-        return chatRoomJpaRepository.existsByUserIdAndId(userId, roomId);
+    public void insertWithoutSelect(ChatRoom chatRoom) {
+        em.persist(chatRoom);
+    }
+
+    @Override
+    public Optional<ChatRoom> findByRoomId(Long roomId){
+        return chatRoomJpaRepository.findById(roomId);
     }
 
     @Override
@@ -30,23 +35,12 @@ public class ChatRepositoryImpl implements ChatRepository {
     }
 
     @Override
-    public void insertChatRoomWithoutSelect(ChatRoom chatRoom) {
-        em.persist(chatRoom);
-    }
-
-    @Override
-    public void insertChatHistoryWithoutSelect(ChatHistory chatHistory){
-        em.persist(chatHistory);
-    }
-
-    @Override
-    public void deleteChatHistoryByRoomId(Long roomId) {
-        chatHistoryJpaRepository.deleteByRoomId(roomId);
-    }
-
-    @Override
-    public void deleteChatRoomById(Long roomId) {
+    public void deleteById(Long roomId) {
         chatRoomJpaRepository.deleteById(roomId);
     }
 
+    @Override
+    public boolean existsByRoomIdAndUserId(Long roomId, String userId) {
+        return chatRoomJpaRepository.existsByIdAndUserId(roomId, userId);
+    }
 }
