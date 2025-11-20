@@ -2,8 +2,10 @@ package core.chat.repository;
 
 import core.chat.entity.ChatHistory;
 import core.chat.entity.ChatRoom;
+import core.chat.service.dto.ChatRoomDto;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,8 +17,9 @@ public class ChatRepositoryImpl implements ChatRepository {
     private final EntityManager em;
 
     @Override
-    public boolean existsByUserIdAndRoomId(String userId, Long roomId) {
-        return chatRoomJpaRepository.existsByUserIdAndId(userId, roomId);
+    public Optional<ChatRoomDto> findChatRoomByRoomId(Long roomId){
+        Optional<ChatRoom> optionalChatRoom = chatRoomJpaRepository.findById(roomId);
+        return optionalChatRoom.map(ChatRoomDto::of);
     }
 
     @Override

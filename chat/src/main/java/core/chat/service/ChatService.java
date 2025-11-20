@@ -4,7 +4,9 @@ import core.chat.controller.response.ChatRoomResponse;
 import core.chat.entity.ChatHistory;
 import core.chat.entity.ChatRoom;
 import core.chat.repository.ChatRepository;
+import core.chat.service.dto.ChatRoomDto;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +32,10 @@ public class ChatService {
 
     @Transactional(readOnly = true)
     public boolean checkIsValidRoomId(String userId, Long roomId) {
-        return chatRepository.existsByUserIdAndRoomId(userId, roomId);
+        Optional<ChatRoomDto> optionalChatRoomDto = chatRepository.findChatRoomByRoomId(roomId);
+        return optionalChatRoomDto.map(
+                chatRoomDto -> chatRoomDto.getUserId().equals(userId)
+        ).orElse(true);
     }
 
     @Transactional(readOnly = true)
