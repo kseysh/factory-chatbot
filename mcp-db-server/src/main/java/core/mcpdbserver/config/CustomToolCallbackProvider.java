@@ -20,6 +20,5 @@ public class CustomToolCallbackProvider {
         return MethodToolCallbackProvider.builder()
                 .toolObjects(energyDataSetService, dateTimeService)
                 .build();
-
     }
 }
