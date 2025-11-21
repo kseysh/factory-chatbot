@@ -25,7 +25,9 @@ public class LLMService {
     public String chat(Long roomId, String question) {
         String conversationId = roomId.toString();
         chatMemory.add(conversationId, new UserMessage(question));
-        CallResponseSpec response = chatClient.prompt(new Prompt(chatMemory.get(conversationId))).call();
+        CallResponseSpec response = chatClient.prompt(new Prompt(chatMemory.get(conversationId)))
+                .system(PromptContent.SYSTEM_PROMPT_DEFAULT_CHAT.getContent())
+                .call();
         checkLlmResponse(response);
 
         String answer = response.content();
