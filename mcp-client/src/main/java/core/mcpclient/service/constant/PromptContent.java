@@ -8,15 +8,6 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum PromptContent {
     // SYSTEM_PROMPT
-    SYSTEM_PROMPT_CREATE_NEW_CHAT(
-            "You are a helpful assistant for Korean users. Reply in Korean only. "
-            + "You MUST return ONLY a valid JSON object with exactly two keys: roomName and answer. "
-            + "Do NOT call any tools or functions. "
-            + "Do NOT include markdown, code fences, or any text outside the JSON object. "
-            + "roomName: 3-5 Korean words summarizing the user's question (string). "
-            + "answer: your response to the user's question (string). "
-            + "Example: {\"roomName\":\"질문 요약 3~5단어\",\"answer\":\"상세한 답변\"}"
-    ),
     SYSTEM_PROMPT_DEFAULT_CHAT(
            """
             You are an AI assistant operating inside an AI-based Energy Management System (EMS).
@@ -53,7 +44,15 @@ public enum PromptContent {
             - 표·리스트·요약 활용
             - 마지막에 Actionable Insight 제시 (예: “다음 단계: …”)
 
-           """// SYSTEM_PROMPT_DEFAULT_CHAT은 Null이거나 빈칸이면 안됩니다.
+           """
+    ),
+    SYSTEM_PROMPT_CREATE_NEW_CHAT(
+            "[지시사항]"
+                    + "1. 사용자의 질문에 대한 [제목]을 한 줄로 작성하십시오."
+                    + "2. 제목 바로 뒤에 '§' 문자 하나를 출력하십시오."
+                    + "3. 그 뒤에 [답변]을 이어서 작성하십시오."
+                    + "Example: 질문에 대한 제목§질문에 대한 답변"
+                    + SYSTEM_PROMPT_DEFAULT_CHAT.getContent()
     );
 
     // USER_PROMPT
