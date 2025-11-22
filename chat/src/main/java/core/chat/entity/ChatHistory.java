@@ -15,7 +15,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PUBLIC)
 public class ChatHistory {
 
     @Id
@@ -50,7 +50,7 @@ public class ChatHistory {
         return ChatHistory.builder()
                 .id(Snowflake.getInstance().nextId())
                 .roomId(roomId)
-                .type(MessageType.LLM)
+                .type(MessageType.ASSISTANT)
                 .content(content)
                 .build();
     }
