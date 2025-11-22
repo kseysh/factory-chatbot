@@ -334,7 +334,7 @@ class ChatFacadeTest {
         ChatResponse result = chatFacade.chat(TEST_USER_ID, new ChatRequest(TEST_ROOM_ID, QUESTION));
 
         // then
-        assertThat(result.getAnswerId()).isNotNull();
+        assertThat(result.getLlmChatId()).isNotNull();
     }
 
     @Test
