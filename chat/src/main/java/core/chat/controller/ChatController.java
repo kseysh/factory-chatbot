@@ -3,7 +3,9 @@ package core.chat.controller;
 import core.chat.controller.request.ChatHistoryRequest;
 import core.chat.controller.request.ChatRoomListRequest;
 import core.chat.controller.response.ChatHistoriesResponse;
+import core.chat.controller.response.ChatResponseDeprecated;
 import core.chat.controller.response.ChatRoomListResponse;
+import core.chat.controller.response.CreateChatRoomResponseDeprecated;
 import core.global.auth.UserId;
 import core.chat.controller.request.ChatRequest;
 import core.chat.controller.request.CreateChatRoomRequest;
@@ -23,19 +25,34 @@ public class ChatController {
     private final LLMHealthCheckService llmHealthCheckService;
     private final ChatFacade chatFacade;
 
-    @PostMapping("/v1/chat")
+    @PostMapping("/v2/chat")
     public ResponseEntity<ChatResponse> chat(
             @UserId String userId,
             @Valid @RequestBody ChatRequest request) {
         return ResponseEntity.ok(chatFacade.chat(userId, request));
     }
 
-    @PostMapping("/v1/chat/room/create")
+    @PostMapping("/v1/chat")
+    public ResponseEntity<ChatResponseDeprecated> chatDeprecated(
+            @UserId String userId,
+            @Valid @RequestBody ChatRequest request) {
+        return ResponseEntity.ok(chatFacade.chatDeprecated(userId, request));
+    }
+
+    @PostMapping("/v2/chat/room/create")
     public ResponseEntity<CreateChatRoomResponse> createChatRoom(
             @UserId String userId,
             @Valid @RequestBody CreateChatRoomRequest request
     ) {
         return ResponseEntity.ok(chatFacade.startNewChat(userId, request));
+    }
+
+    @PostMapping("/v1/chat/room/create")
+    public ResponseEntity<CreateChatRoomResponseDeprecated> createChatRoomDeprecated(
+            @UserId String userId,
+            @Valid @RequestBody CreateChatRoomRequest request
+    ) {
+        return ResponseEntity.ok(chatFacade.startNewChatDeprecated(userId, request));
     }
 
     @GetMapping("/v1/chat")

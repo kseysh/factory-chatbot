@@ -4,11 +4,9 @@ import core.chat.controller.request.*;
 import core.chat.controller.response.*;
 import core.chat.entity.ChatHistory;
 import core.chat.entity.ChatRoom;
-import core.chat.service.dto.ChatRoomDto;
 import core.common.snowflake.Snowflake;
 import core.mcpclient.service.dto.NewChatRoomInfo;
 import core.mcpclient.service.LLMService;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +32,28 @@ public class ChatFacade {
         ChatHistory llmChat = ChatHistory.createLLMChatHistory(roomId, answer);
         chatHistoryService.saveChatHistory(userChat, llmChat);
 
-        return ChatResponse.of(llmChat);
+        return ChatResponse.builder()
+                .roomId(roomId)
+                .answer(answer)
+                .llmChatId(llmChat.getId())
+                .userChatId(userChat.getId())
+                .build();
+    }
+
+    @Transactional
+    public ChatResponseDeprecated chatDeprecated(String userId, ChatRequest chatRequest) {
+        Long roomId = chatRequest.getRoomId();
+        if (!chatRoomService.canUserAccessRoom(roomId, userId)) {
+            throw new IllegalArgumentException("Invalid room ID: " + roomId + " for user: " + userId);
+        }
+        String question = chatRequest.getQuestion();
+        String answer = llmService.chat(roomId, question);
+
+        ChatHistory userChat = ChatHistory.createUserChatHistory(roomId, question);
+        ChatHistory llmChat = ChatHistory.createLLMChatHistory(roomId, answer);
+        chatHistoryService.saveChatHistory(userChat, llmChat);
+
+        return ChatResponseDeprecated.of(llmChat);
     }
 
     @Transactional
@@ -50,7 +69,29 @@ public class ChatFacade {
         chatRoomService.saveChatRoom(chatRoom);
         chatHistoryService.saveChatHistory(userChat, llmChat);
 
-        return CreateChatRoomResponse.of(chatRoom.getName(), llmChat);
+        return CreateChatRoomResponse.builder()
+                .roomId(roomId)
+                .roomName(chatRoom.getName())
+                .answer(newChatRoomInfo.answer())
+                .userChatId(userChat.getId())
+                .llmChatId(llmChat.getId())
+                .build();
+    }
+
+    @Transactional
+    public CreateChatRoomResponseDeprecated startNewChatDeprecated(String userId, CreateChatRoomRequest request) {
+        Long roomId = Snowflake.getInstance().nextId();
+        String question = request.getQuestion();
+
+        NewChatRoomInfo newChatRoomInfo = llmService.startNewChat(roomId, question);
+
+        ChatRoom chatRoom = ChatRoom.createChatRoom(roomId, userId, newChatRoomInfo.roomName());
+        ChatHistory userChat = ChatHistory.createUserChatHistory(roomId, question);
+        ChatHistory llmChat = ChatHistory.createLLMChatHistory(roomId, newChatRoomInfo.answer());
+        chatRoomService.saveChatRoom(chatRoom);
+        chatHistoryService.saveChatHistory(userChat, llmChat);
+
+        return CreateChatRoomResponseDeprecated.of(chatRoom.getName(), llmChat);
     }
 
     @Transactional(readOnly = true)
