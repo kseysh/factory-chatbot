@@ -89,7 +89,7 @@ class ChatHistoryRepositoryTest {
         // then
         ChatHistory found = chatHistoryJpaRepository.findById(llmChat.getId()).orElse(null);
         assertThat(found).isNotNull();
-        assertThat(found.getType()).isEqualTo(MessageType.LLM);
+        assertThat(found.getType()).isEqualTo(MessageType.ASSISTANT);
         assertThat(found.getContent()).isEqualTo("LLM 응답");
     }
 
