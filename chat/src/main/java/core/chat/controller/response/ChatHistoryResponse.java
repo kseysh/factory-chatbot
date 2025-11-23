@@ -17,7 +17,7 @@ public class ChatHistoryResponse {
         return new ChatHistoryResponse(
                 chatHistory.getId(),
                 chatHistory.getContent(),
-                chatHistory.getType() == MessageType.LLM
+                chatHistory.getType() == MessageType.ASSISTANT
         );
     }
 }

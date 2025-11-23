@@ -15,9 +15,12 @@ import core.chat.service.ChatFacade;
 import core.mcpclient.service.LLMHealthCheckService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import reactor.core.Disposable;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,13 +35,6 @@ public class ChatController {
         return ResponseEntity.ok(chatFacade.chat(userId, request));
     }
 
-    @PostMapping("/v1/chat")
-    public ResponseEntity<ChatResponseDeprecated> chatDeprecated(
-            @UserId String userId,
-            @Valid @RequestBody ChatRequest request) {
-        return ResponseEntity.ok(chatFacade.chatDeprecated(userId, request));
-    }
-
     @PostMapping("/v2/chat/room/create")
     public ResponseEntity<CreateChatRoomResponse> createChatRoom(
             @UserId String userId,
@@ -47,12 +43,59 @@ public class ChatController {
         return ResponseEntity.ok(chatFacade.startNewChat(userId, request));
     }
 
-    @PostMapping("/v1/chat/room/create")
-    public ResponseEntity<CreateChatRoomResponseDeprecated> createChatRoomDeprecated(
+    @PostMapping("/v1/chat/stream")
+    public SseEmitter chatStream(
+            @UserId String userId,
+            @Valid @RequestBody ChatRequest request) {
+        SseEmitter emitter = new SseEmitter(60 * 1000L);
+
+        Disposable disposable = chatFacade.chatStream(userId, request).subscribe(
+                data -> {
+                    try {
+                        emitter.send(data);
+                    } catch (IOException e) {
+                        emitter.completeWithError(e);
+                    }
+                },// onNext: 데이터 전송
+                emitter::completeWithError, // onError: 에러 전파
+                emitter::complete // onComplete: 종료
+        );
+
+        emitter.onCompletion(disposable::dispose);
+        emitter.onTimeout(() -> {
+            emitter.complete();
+            disposable.dispose();
+        });
+
+        return emitter;
+    }
+
+    @PostMapping("/v1/chat/room/create/stream")
+    public SseEmitter createChatRoomStream(
             @UserId String userId,
             @Valid @RequestBody CreateChatRoomRequest request
     ) {
-        return ResponseEntity.ok(chatFacade.startNewChatDeprecated(userId, request));
+        SseEmitter emitter = new SseEmitter(60 * 1000L);
+
+        Disposable disposable = chatFacade.startNewChatStream(userId, request).subscribe(
+                data -> {
+                    try {
+                        emitter.send(data);
+                    } catch (IOException e) {
+                        emitter.completeWithError(e);
+                    }
+                },// onNext: 데이터 전송
+                emitter::completeWithError, // onError: 에러 전파
+                emitter::complete // onComplete: 종료
+        );
+
+        emitter.onCompletion(disposable::dispose);
+        emitter.onTimeout(() -> {
+            emitter.complete();
+            disposable.dispose();
+        });
+
+        return emitter;
     }
 
     @GetMapping("/v1/chat")
@@ -88,5 +131,20 @@ public class ChatController {
     @GetMapping("/health")
     public ResponseEntity<Void> healthCheck() {
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/v1/chat")
+    public ResponseEntity<ChatResponseDeprecated> chatDeprecated(
+            @UserId String userId,
+            @Valid @RequestBody ChatRequest request) {
+        return ResponseEntity.ok(chatFacade.chatDeprecated(userId, request));
+    }
+
+    @PostMapping("/v1/chat/room/create")
+    public ResponseEntity<CreateChatRoomResponseDeprecated> createChatRoomDeprecated(
+            @UserId String userId,
+            @Valid @RequestBody CreateChatRoomRequest request
+    ) {
+        return ResponseEntity.ok(chatFacade.startNewChatDeprecated(userId, request));
     }
 }

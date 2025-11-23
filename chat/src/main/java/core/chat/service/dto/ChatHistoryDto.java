@@ -14,7 +14,7 @@ public class ChatHistoryDto {
     private final Boolean isChatbot;
 
     public static ChatHistoryDto of(ChatHistory chatHistory) {
-        boolean isChatbot = chatHistory.getType() == MessageType.LLM;
+        boolean isChatbot = chatHistory.getType() == MessageType.ASSISTANT;
         return new ChatHistoryDto(chatHistory.getId(), chatHistory.getContent(), isChatbot);
     }
 }
