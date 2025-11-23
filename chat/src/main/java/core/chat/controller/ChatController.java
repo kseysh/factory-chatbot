@@ -44,10 +44,30 @@ public class ChatController {
     }
 
     @PostMapping("/v1/chat/stream")
-    public ResponseEntity<ChatResponse> chatStream(
+    public SseEmitter chatStream(
             @UserId String userId,
             @Valid @RequestBody ChatRequest request) {
-        return ResponseEntity.ok(chatFacade.chatStream(userId, request));
+        SseEmitter emitter = new SseEmitter(60 * 1000L);
+
+        Disposable disposable = chatFacade.chatStream(userId, request).subscribe(
+                data -> {
+                    try {
+                        emitter.send(data);
+                    } catch (IOException e) {
+                        emitter.completeWithError(e);
+                    }
+                },// onNext: 데이터 전송
+                emitter::completeWithError, // onError: 에러 전파
+                emitter::complete // onComplete: 종료
+        );
+
+        emitter.onCompletion(disposable::dispose);
+        emitter.onTimeout(() -> {
+            emitter.complete();
+            disposable.dispose();
+        });
+
+        return emitter;
     }
 
     @PostMapping("/v1/chat/room/create/stream")
