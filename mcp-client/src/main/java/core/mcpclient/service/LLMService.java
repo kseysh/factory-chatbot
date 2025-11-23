@@ -37,10 +37,8 @@ public class LLMService {
                 question,
                 SYSTEM_PROMPT_DEFAULT_CHAT.getContent()
         ).call();
-        checkLlmResponse(response);
 
-        String answer = response.content();
-        return answer;
+        return response.content();
     }
 
     @Transactional
@@ -61,7 +59,7 @@ public class LLMService {
                 question,
                 SYSTEM_PROMPT_CREATE_NEW_CHAT.getContent()
         ).call();
-        checkLlmResponse(response);
+
         String responseContent = response.content();
 
         int separatorIndex = responseContent.indexOf(TITLE_SEPARATOR);
@@ -108,16 +106,6 @@ public class LLMService {
         messages.add(new UserMessage(question));
         Prompt prompt = new Prompt(messages);
         return chatClient.prompt(prompt).system(systemPrompt);
-    }
-
-    private void checkLlmResponse(CallResponseSpec response) {
-        if (response == null) {
-            throw new IllegalArgumentException("LLM response is null");
-        }
-        String content = response.content();
-        if (content == null || content.trim().isEmpty()) {
-            throw new IllegalArgumentException("LLM response content is null or empty");
-        }
     }
 
 }
