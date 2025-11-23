@@ -27,7 +27,6 @@ public class ChatFacade {
     private final LLMService llmService;
     private final ChatRoomService chatRoomService;
     private final ChatHistoryService chatHistoryService;
-    private final Snowflake snowflake = Snowflake.getInstance();
 
     @Transactional
     public ChatResponse chat(String userId, ChatRequest chatRequest) {
@@ -62,8 +61,8 @@ public class ChatFacade {
                                 "Invalid room ID: " + roomId + " for user: " + userId));
                     }
 
-                    Long userChatId = snowflake.nextId();
-                    Long llmChatId = snowflake.nextId();
+                    Long userChatId = Snowflake.getInstance().nextId();
+                    Long llmChatId = Snowflake.getInstance().nextId();
                     StringBuilder answerBuilder = new StringBuilder();
 
                     Mono<Object> metaPacket = Mono.just(
@@ -117,9 +116,9 @@ public class ChatFacade {
     }
 
     public Flux<Object> startNewChatStream(String userId, CreateChatRoomRequest request) {
-        Long roomId = snowflake.nextId();
-        Long userChatId = snowflake.nextId();
-        Long llmChatId = snowflake.nextId();
+        Long roomId = Snowflake.getInstance().nextId();
+        Long userChatId = Snowflake.getInstance().nextId();
+        Long llmChatId = Snowflake.getInstance().nextId();
 
         StringBuilder titleBuilder = new StringBuilder();
         StringBuilder answerBuilder = new StringBuilder();
