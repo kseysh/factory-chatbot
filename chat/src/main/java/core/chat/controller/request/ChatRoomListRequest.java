@@ -16,7 +16,6 @@ public class ChatRoomListRequest {
 
     @Min(MIN_CHAT_ROOM_PAGE_SIZE)
     @Max(MAX_CHAT_ROOM_PAGE_SIZE)
-    @Nullable
     private final Integer size;
 
     public ChatRoomListRequest(@Nullable Long lastRoomId, @Nullable Integer size) {
