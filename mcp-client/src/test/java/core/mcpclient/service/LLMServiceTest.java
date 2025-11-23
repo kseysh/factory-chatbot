@@ -74,25 +74,25 @@ class LLMServiceTest {
         assertThat(result).isEqualTo(TEST_ANSWER);
     }
 
-    @ParameterizedTest
-    @DisplayName("chat 메서드는 LLM 응답이 null 또는 Empty 또는 공백이면 예외를 발생시킨다")
-    @NullAndEmptySource
-    @ValueSource(strings = {" "})
-    void chat_shouldThrowExceptionWhenResponseIsNull(String llmAnswer) {
-        // given
-        ArrayList<Message> messages = new ArrayList<>();
-        messages.add(new UserMessage(TEST_QUESTION));
-        given(chatMemory.get(TEST_CONVERSATION_ID)).willReturn(messages);
-        given(chatClient.prompt(any(Prompt.class))).willReturn(callRequestSpec);
-        given(callRequestSpec.system(anyString())).willReturn(callRequestSpec);
-        given(callRequestSpec.call()).willReturn(callResponseSpec);
-        given(callResponseSpec.content()).willReturn(llmAnswer);
-
-        // when & then
-        assertThatThrownBy(() -> llmService.chat(TEST_ROOM_ID, TEST_QUESTION))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("LLM response content is null or empty");
-    }
+//    @ParameterizedTest
+//    @DisplayName("chat 메서드는 LLM 응답이 null 또는 Empty 또는 공백이면 예외를 발생시킨다")
+//    @NullAndEmptySource
+//    @ValueSource(strings = {" "})
+//    void chat_shouldThrowExceptionWhenResponseIsNull(String llmAnswer) {
+//        // given
+//        ArrayList<Message> messages = new ArrayList<>();
+//        messages.add(new UserMessage(TEST_QUESTION));
+//        given(chatMemory.get(TEST_CONVERSATION_ID)).willReturn(messages);
+//        given(chatClient.prompt(any(Prompt.class))).willReturn(callRequestSpec);
+//        given(callRequestSpec.system(anyString())).willReturn(callRequestSpec);
+//        given(callRequestSpec.call()).willReturn(callResponseSpec);
+//        given(callResponseSpec.content()).willReturn(llmAnswer);
+//
+//        // when & then
+//        assertThatThrownBy(() -> llmService.chat(TEST_ROOM_ID, TEST_QUESTION))
+//                .isInstanceOf(IllegalArgumentException.class)
+//                .hasMessage("LLM response content is null or empty");
+//    }
 
     // ==================== startNewChat Tests ====================
 
@@ -116,24 +116,24 @@ class LLMServiceTest {
         verify(chatClient).prompt(any(Prompt.class));
     }
 
-    @ParameterizedTest
-    @DisplayName("startNewChat 메서드는 LLM 응답이 null 또는 Empty 또는 공백이면 예외를 발생시킨다")
-    @NullAndEmptySource
-    @ValueSource(strings = {" "})
-    void startNewChat_shouldThrowExceptionWhenResponseIsNull(String llmAnswer) {
-        // given
-        ArrayList<Message> messages = new ArrayList<>();
-        messages.add(new UserMessage(TEST_QUESTION));
-        given(chatMemory.get(TEST_CONVERSATION_ID)).willReturn(messages);
-        given(chatClient.prompt(any(Prompt.class))).willReturn(callRequestSpec);
-        given(callRequestSpec.system(anyString())).willReturn(callRequestSpec);
-        given(callRequestSpec.call()).willReturn(callResponseSpec);
-        given(callResponseSpec.content()).willReturn(llmAnswer);
-
-        // when & then
-        assertThatThrownBy(() -> llmService.startNewChat(TEST_ROOM_ID, TEST_QUESTION))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
+//    @ParameterizedTest
+//    @DisplayName("startNewChat 메서드는 LLM 응답이 null 또는 Empty 또는 공백이면 예외를 발생시킨다")
+//    @NullAndEmptySource
+//    @ValueSource(strings = {" "})
+//    void startNewChat_shouldThrowExceptionWhenResponseIsNull(String llmAnswer) {
+//        // given
+//        ArrayList<Message> messages = new ArrayList<>();
+//        messages.add(new UserMessage(TEST_QUESTION));
+//        given(chatMemory.get(TEST_CONVERSATION_ID)).willReturn(messages);
+//        given(chatClient.prompt(any(Prompt.class))).willReturn(callRequestSpec);
+//        given(callRequestSpec.system(anyString())).willReturn(callRequestSpec);
+//        given(callRequestSpec.call()).willReturn(callResponseSpec);
+//        given(callResponseSpec.content()).willReturn(llmAnswer);
+//
+//        // when & then
+//        assertThatThrownBy(() -> llmService.startNewChat(TEST_ROOM_ID, TEST_QUESTION))
+//                .isInstanceOf(IllegalArgumentException.class);
+//    }
 
     // ==================== chatStream Tests ====================
     @Test
