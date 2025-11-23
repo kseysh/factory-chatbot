@@ -22,10 +22,18 @@ if [ ! -d "${APP_DIR}" ]; then
     exit 1
 fi
 
+PREVIOUS_IMAGE_ID=$(sudo docker inspect -f '{{.Image}}' "${CONTAINER_NAME}" 2>/dev/null || true)
+if [ -n "${PREVIOUS_IMAGE_ID}" ]; then
+    echo "Found previous image ID: ${PREVIOUS_IMAGE_ID}"
+fi
+
 # Stop existing container on port 8080
 echo "Stopping existing container on port ${BLUE_PORT}..."
 sudo docker stop "${CONTAINER_NAME}" 2>/dev/null || true
 sudo docker rm "${CONTAINER_NAME}" 2>/dev/null || true
+
+echo "Cleaning up dangling and unused Docker resources..."
+sudo docker system prune -f
 
 # Pull Docker image
 echo "Pulling Docker image: ${DOCKER_IMAGE}..."
@@ -67,6 +75,11 @@ if [ ${RETRY_COUNT} -eq ${MAX_RETRIES} ]; then
     sudo docker stop "${CONTAINER_NAME}" || true
     sudo docker rm "${CONTAINER_NAME}" || true
     exit 1
+fi
+
+if [ -n "${PREVIOUS_IMAGE_ID}" ]; then
+    echo "Deployment successful. Deleting previous image: ${PREVIOUS_IMAGE_ID}..."
+    sudo docker rmi "${PREVIOUS_IMAGE_ID}" 2>/dev/null || echo "Previous image is still in use or already cleaned up."
 fi
 
 echo ""
