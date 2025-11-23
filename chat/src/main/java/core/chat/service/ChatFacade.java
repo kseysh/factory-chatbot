@@ -11,8 +11,6 @@ import core.chat.service.dto.ChatRoomNameStreamResponse;
 import core.common.snowflake.Snowflake;
 import core.mcpclient.service.dto.NewChatRoomInfo;
 import core.mcpclient.service.LLMService;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,16 +135,13 @@ public class ChatFacade {
                     }
                 })
                 .flatMap(chunk -> {
-                    List<Object> packets = new ArrayList<>();
-
-                    if (chunk.roomName() != null && !chunk.roomName().isEmpty()) {
-                        packets.add(new ChatRoomNameStreamResponse(chunk.roomName()));
-                    }
-                    if (chunk.answer() != null && !chunk.answer().isEmpty()) {
-                        packets.add(new ChatAnswerStreamResponse(chunk.answer()));
-                    }
-
-                    return Flux.fromIterable(packets);
+                    Flux<Object> nameFlux = (chunk.roomName() != null && !chunk.roomName().isEmpty())
+                            ? Flux.just(new ChatRoomNameStreamResponse(chunk.roomName()))
+                            : Flux.empty();
+                    Flux<Object> answerFlux = (chunk.answer() != null && !chunk.answer().isEmpty())
+                            ? Flux.just(new ChatAnswerStreamResponse(chunk.answer()))
+                            : Flux.empty();
+                    return Flux.concat(nameFlux, answerFlux);
                 });
 
         return Flux.concat(metaPacket, contentStream)
