@@ -13,6 +13,4 @@ dependencies {
 
     implementation 'org.springframework.ai:spring-ai-starter-model-chat-memory-repository-jdbc'
     runtimeOnly 'org.postgresql:postgresql'
-
-    implementation project(':mcp-db-server')
 }
