@@ -2,5 +2,4 @@ rootProject.name = 'factory-chatbot'
 
 include 'chat'
 include 'mcp-client'
-include 'mcp-db-server'
 include 'common:snowflake'

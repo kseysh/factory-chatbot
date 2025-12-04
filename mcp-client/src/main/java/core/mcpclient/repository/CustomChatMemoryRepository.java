@@ -49,7 +49,7 @@ public class CustomChatMemoryRepository implements ChatMemoryRepository {
                 case USER -> new UserMessage(content);
                 case ASSISTANT -> new AssistantMessage(content);
                 case SYSTEM -> new SystemMessage(content);
-                case TOOL -> new ToolResponseMessage(List.of());
+                case TOOL -> ToolResponseMessage.builder().responses(List.of()).build();
             };
         }
     }

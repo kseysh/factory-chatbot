@@ -12,7 +12,7 @@ allprojects { // 멀티모듈 설정 공유
     }
 
     ext {
-        set('springAiVersion', "1.0.3")
+        set('springAiVersion', "1.1.0")
     }
 
     apply plugin: 'java'
@@ -21,6 +21,9 @@ allprojects { // 멀티모듈 설정 공유
     dependencyManagement {
         imports {
             mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
+        }
+        dependencies {
+            dependency 'org.projectlombok:lombok:1.18.30'
         }
     }
 
