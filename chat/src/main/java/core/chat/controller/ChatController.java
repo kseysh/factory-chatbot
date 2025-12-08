@@ -127,7 +127,7 @@ public class ChatController {
     @PostMapping("/v1/mcp/tools/refresh")
     public ResponseEntity<Void> refreshTools() {
         mcpToolService.refreshTools();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/v1/mcp/health")
