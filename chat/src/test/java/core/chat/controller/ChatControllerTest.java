@@ -6,6 +6,7 @@ import core.chat.controller.response.*;
 import core.chat.entity.ChatHistory;
 import core.chat.service.ChatFacade;
 import core.mcpclient.service.LLMHealthCheckService;
+import core.mcpclient.service.McpToolService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -42,6 +43,9 @@ class ChatControllerTest {
 
     @MockitoBean
     private LLMHealthCheckService llmHealthCheckService;
+
+    @MockitoBean
+    private McpToolService mcpToolService;
 
     private static final String CLIENT_ID_HEADER = "X-Client-Id";
 
