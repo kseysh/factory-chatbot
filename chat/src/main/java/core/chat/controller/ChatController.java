@@ -13,6 +13,7 @@ import core.chat.controller.response.ChatResponse;
 import core.chat.controller.response.CreateChatRoomResponse;
 import core.chat.service.ChatFacade;
 import core.mcpclient.service.LLMHealthCheckService;
+import core.mcpclient.service.McpToolService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.io.IOException;
@@ -26,6 +27,7 @@ import reactor.core.Disposable;
 @RequiredArgsConstructor
 public class ChatController {
     private final LLMHealthCheckService llmHealthCheckService;
+    private final McpToolService mcpToolService;
     private final ChatFacade chatFacade;
 
     @PostMapping("/v2/chat")
@@ -120,6 +122,12 @@ public class ChatController {
     ) {
         chatFacade.deleteRoom(userId, roomId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/v1/mcp/tools/refresh")
+    public ResponseEntity<Void> refreshTools() {
+        mcpToolService.refreshTools();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/v1/mcp/health")
