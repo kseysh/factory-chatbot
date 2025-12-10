@@ -16,7 +16,6 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.SynchronousSink;
 
@@ -29,7 +28,6 @@ public class LLMService {
     private final ChatMemory chatMemory;
     public static final char TITLE_SEPARATOR = '§';
 
-    @Transactional
     public String chat(Long roomId, String question) {
         String conversationId = roomId.toString();
         CallResponseSpec response = this.getChatClientRequestSpec(
@@ -41,17 +39,15 @@ public class LLMService {
         return response.content();
     }
 
-    @Transactional
     public Flux<String> chatStream(Long roomId, String question) {
         String conversationId = roomId.toString();
         return this.getChatClientRequestSpec(
-                        conversationId,
-                        question,
-                        SYSTEM_PROMPT_DEFAULT_CHAT.getContent()
-                ).stream().content();
+                conversationId,
+                question,
+                SYSTEM_PROMPT_DEFAULT_CHAT.getContent()
+        ).stream().content();
     }
 
-    @Transactional
     public NewChatRoomInfo startNewChat(Long roomId, String question) {
         String conversationId = roomId.toString();
         CallResponseSpec response = this.getChatClientRequestSpec(
@@ -61,15 +57,18 @@ public class LLMService {
         ).call();
 
         String responseContent = response.content();
-
+        if (responseContent == null) {
+            throw new RuntimeException("LLM 응답이 존재하지 않습니다.");
+        }
         int separatorIndex = responseContent.indexOf(TITLE_SEPARATOR);
-        if (separatorIndex == -1) throw new RuntimeException("LLM의 답변에 제목과 본문을 구분하는 구분자가 존재하지 않습니다.");
+        if (separatorIndex == -1) {
+            throw new RuntimeException("LLM의 답변에 제목과 본문을 구분하는 구분자가 존재하지 않습니다.");
+        }
         String roomName = responseContent.substring(0, separatorIndex);
         String answer = responseContent.substring(separatorIndex + 1);
         return new NewChatRoomInfo(roomName, answer);
     }
 
-    @Transactional
     public Flux<NewChatRoomInfo> startNewChatStream(Long roomId, String question) {
         String conversationId = roomId.toString();
         AtomicBoolean isAnswerMode = new AtomicBoolean(false);
