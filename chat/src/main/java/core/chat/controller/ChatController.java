@@ -3,9 +3,7 @@ package core.chat.controller;
 import core.chat.controller.request.ChatHistoryRequest;
 import core.chat.controller.request.ChatRoomListRequest;
 import core.chat.controller.response.ChatHistoriesResponse;
-import core.chat.controller.response.ChatResponseDeprecated;
 import core.chat.controller.response.ChatRoomListResponse;
-import core.chat.controller.response.CreateChatRoomResponseDeprecated;
 import core.global.auth.UserId;
 import core.chat.controller.request.ChatRequest;
 import core.chat.controller.request.CreateChatRoomRequest;
@@ -139,20 +137,5 @@ public class ChatController {
     @GetMapping("/health")
     public ResponseEntity<Void> healthCheck() {
         return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/v1/chat")
-    public ResponseEntity<ChatResponseDeprecated> chatDeprecated(
-            @UserId String userId,
-            @Valid @RequestBody ChatRequest request) {
-        return ResponseEntity.ok(chatFacade.chatDeprecated(userId, request));
-    }
-
-    @PostMapping("/v1/chat/room/create")
-    public ResponseEntity<CreateChatRoomResponseDeprecated> createChatRoomDeprecated(
-            @UserId String userId,
-            @Valid @RequestBody CreateChatRoomRequest request
-    ) {
-        return ResponseEntity.ok(chatFacade.startNewChatDeprecated(userId, request));
     }
 }

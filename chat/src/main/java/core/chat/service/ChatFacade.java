@@ -26,7 +26,6 @@ public class ChatFacade {
     private final ChatRoomService chatRoomService;
     private final ChatHistoryService chatHistoryService;
 
-    @Transactional
     public ChatResponse chat(String userId, ChatRequest chatRequest) {
         Long roomId = chatRequest.getRoomId();
         if (!chatRoomService.canUserAccessRoom(roomId, userId)) {
@@ -52,7 +51,7 @@ public class ChatFacade {
         String question = chatRequest.getQuestion();
 
         return Mono.fromCallable(() -> chatRoomService.canUserAccessRoom(roomId, userId))
-                .subscribeOn(Schedulers.boundedElastic()) // 알바생 스레드에게 위임
+                .subscribeOn(Schedulers.boundedElastic())
                 .flatMapMany(isAllowed -> {
                     if (Boolean.FALSE.equals(isAllowed)) {
                         return Flux.error(new IllegalArgumentException(
@@ -91,7 +90,6 @@ public class ChatFacade {
                 });
     }
 
-    @Transactional
     public CreateChatRoomResponse startNewChat(String userId, CreateChatRoomRequest request) {
         Long roomId = Snowflake.getInstance().nextId();
         String question = request.getQuestion();
@@ -167,7 +165,6 @@ public class ChatFacade {
                 });
     }
 
-    @Transactional(readOnly = true)
     public ChatHistoriesResponse getChatHistories(String userId, ChatHistoryRequest request) {
         if (!chatRoomService.canUserAccessRoom(request.getRoomId(), userId)) {
             throw new IllegalArgumentException("Invalid room ID: " + request.getRoomId() + " for user: " + userId);
@@ -186,7 +183,6 @@ public class ChatFacade {
         );
     }
 
-    @Transactional(readOnly = true)
     public ChatRoomListResponse getChatRooms(String userId, ChatRoomListRequest request) {
         if (request.getLastRoomId() == null) {
             return ChatRoomListResponse.of(
@@ -212,37 +208,5 @@ public class ChatFacade {
         return chatRoomService.findChatRoomByRoomId(roomId).map(
                 chatRoomDto -> chatRoomDto.getUserId().equals(userId)
         ).orElse(true);
-    }
-
-    @Transactional
-    public ChatResponseDeprecated chatDeprecated(String userId, ChatRequest chatRequest) {
-        Long roomId = chatRequest.getRoomId();
-        if (!chatRoomService.canUserAccessRoom(roomId, userId)) {
-            throw new IllegalArgumentException("Invalid room ID: " + roomId + " for user: " + userId);
-        }
-        String question = chatRequest.getQuestion();
-        String answer = llmService.chat(roomId, question);
-
-        ChatHistory userChat = ChatHistory.createUserChatHistory(roomId, question);
-        ChatHistory llmChat = ChatHistory.createLLMChatHistory(roomId, answer);
-        chatHistoryService.saveChatHistory(userChat, llmChat);
-
-        return ChatResponseDeprecated.of(llmChat);
-    }
-
-    @Transactional
-    public CreateChatRoomResponseDeprecated startNewChatDeprecated(String userId, CreateChatRoomRequest request) {
-        Long roomId = Snowflake.getInstance().nextId();
-        String question = request.getQuestion();
-
-        NewChatRoomInfo newChatRoomInfo = llmService.startNewChat(roomId, question);
-
-        ChatRoom chatRoom = ChatRoom.createChatRoom(roomId, userId, newChatRoomInfo.roomName());
-        ChatHistory userChat = ChatHistory.createUserChatHistory(roomId, question);
-        ChatHistory llmChat = ChatHistory.createLLMChatHistory(roomId, newChatRoomInfo.answer());
-        chatRoomService.saveChatRoom(chatRoom);
-        chatHistoryService.saveChatHistory(userChat, llmChat);
-
-        return CreateChatRoomResponseDeprecated.of(chatRoom.getName(), llmChat);
     }
 }
