@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeAsyncClient;
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
 
 import java.time.Duration;
@@ -47,6 +48,26 @@ public class BedrockConfig {
                 .build();
 
         log.info("✅ BedrockRuntimeClient created\n");
+        return client;
+    }
+
+    @Bean
+    public BedrockRuntimeAsyncClient bedrockRuntimeAsyncClient() {
+        log.info("🤔 Creating BedrockRuntimeAsyncClient");
+        log.info("📝 Region: {}", awsConnectionProperties.getRegion());
+
+        Duration timeout = awsConnectionProperties.getTimeout();
+        log.info("📝 Timeout: {}", timeout);
+
+        BedrockRuntimeAsyncClient client = BedrockRuntimeAsyncClient.builder()
+                .region(Region.of(awsConnectionProperties.getRegion()))
+                .credentialsProvider(DefaultCredentialsProvider.builder().build())
+                .overrideConfiguration(config -> config
+                        .apiCallTimeout(timeout)
+                        .apiCallAttemptTimeout(timeout))
+                .build();
+
+        log.info("✅ BedrockRuntimeAsyncClient created\n");
         return client;
     }
 
